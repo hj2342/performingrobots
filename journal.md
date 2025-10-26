@@ -5,14 +5,14 @@
 ## 10/02/2025 - Initial Assembly and Motor Troubleshooting:
 Today marked the beginning of our robot construction journey. Working alongside my teammate, I focused primarily on understanding the base mechanics and electrical systems. While my partner tackled the Arduino board diagnostics, I concentrated on preparing the wooden components and testing the motor connections systematically. 
 
-The troubleshooting process was enlightening - watching the methodical elimination of potential failure points taught me the importance of patience in robotics. When we discovered the Arduino fault, I realized how easy it is to assume external wiring issues when the problem lies within core components.
+The troubleshooting process was enlightening watching the methodical elimination of potential failure points taught me the importance of patience in robotics. When we discovered the Arduino fault, I realized how easy it is to assume external wiring issues when the problem lies within core components.
 
-My main contribution involved measuring and preparing the Alpine wood plank for the spine structure. I learned proper techniques for ensuring structural stability - particularly how weight distribution affects a tall, vertical robot. The drilling process required precision to avoid splitting the wood, especially near edges.
+My main contribution involved measuring and preparing the Alpine wood plank for the spine structure. I learned proper techniques for ensuring structural stability particularly how weight distribution affects a tall, vertical robot. The drilling process required precision to avoid splitting the wood, especially near edges.
 
 ## 10/03/2025 - Character Design and Artistic Integration:
-Today shifted from pure mechanics to the artistic side of robotics - something I found surprisingly challenging. While my teammate worked on the shoulder assembly, I focused on understanding how our character's proportions would translate to functional movement.
+Today shifted from pure mechanics to the artistic side of robotics something I found surprisingly challenging. While my teammate worked on the shoulder assembly, I focused on understanding how our character's proportions would translate to functional movement.
 
-The Walter White face cutout process was meticulous. I assisted by holding materials steady and helping with measurements. What struck me most was the balance between aesthetic accuracy and functional practicality - we needed the face light enough not to strain the servo, yet rigid enough to maintain its shape during movement.
+The Walter White face cutout process was meticulous. I assisted by holding materials steady and helping with measurements. What struck me most was the balance between aesthetic accuracy and functional practicality we needed the face light enough not to strain the servo, yet rigid enough to maintain its shape during movement.
 
 I spent considerable time thinking about how to attach the shredded body costume in a way that wouldn't interfere with servo operation or obscure any components we'd need to access later. This forward-thinking approach proved valuable in later sessions.
 
