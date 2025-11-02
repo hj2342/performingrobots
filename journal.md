@@ -52,13 +52,20 @@ The power supply issue highlights a crucial lesson - computational control is me
 **Artistic Reflection:**
 Our robot is becoming a character, not just a machine. The mouth movement, combined with potential shoulder and arm choreography, creates opportunities for genuine performance. I'm thinking about how we might program reaction behaviors or characteristic gestures that reference the source material.
 
-**Next Steps:**
-- LED lights for eyes
+oct 23
+
+- fixing the legs
 - Develop servo calibration routine to establish neutral positions
 - Create movement sequences that test full range of motion
 - Consider adding simple sensors (distance, sound) for interactive behaviors
 
-The 2 a.m. karak from baqala was well-deserved!
+oct 30
+Led lights for eyes
+code development for the eyes
+fixing the radio in the aurdino
+compiling and uoading rhe code to transmitter and receiver
+fix the issue with music box
+
 
 ### Progress Photos:
 ![IMG_0062](https://github.com/user-attachments/assets/f2525f6e-866a-44b1-ae06-0c0e2922bd07)
