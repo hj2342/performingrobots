@@ -52,19 +52,23 @@ The power supply issue highlights a crucial lesson - computational control is me
 **Artistic Reflection:**
 Our robot is becoming a character, not just a machine. The mouth movement, combined with potential shoulder and arm choreography, creates opportunities for genuine performance. I'm thinking about how we might program reaction behaviors or characteristic gestures that reference the source material.
 
-oct 23
+10/23/2025 - Leg Stabilization and Servo Calibration:
 
-- fixing the legs
-- Develop servo calibration routine to establish neutral positions
-- Create movement sequences that test full range of motion
-- Consider adding simple sensors (distance, sound) for interactive behaviors
+Today’s session focused on restoring the robot’s lower body stability. The previous leg joints had shown uneven weight distribution, causing slight wobble during movement. I took the lead in reinforcing the leg structures — re-drilling slightly offset holes to align with the robot’s center of gravity and tightening the mounting brackets to eliminate unwanted flex.
 
-oct 30
-Led lights for eyes
-code development for the eyes
-fixing the radio in the aurdino
-compiling and uoading rhe code to transmitter and receiver
-fix the issue with music box
+Once the mechanical foundation felt stable, we moved into servo calibration. Using the Arduino’s serial interface, I began developing a servo calibration routine to define each motor’s neutral position. This step proved essential for ensuring synchronized, fluid motion — especially in multi-servo sequences where even a few degrees of offset can create unnatural posture or joint stress.
+
+I also designed preliminary movement sequences to test the robot’s full range of motion. These tests helped reveal torque inconsistencies between the left and right sides, likely due to minor servo variance. I noted these discrepancies for software compensation later. Toward the end of the session, we brainstormed the integration of simple sensors — possibly ultrasonic for distance detection or a microphone module for sound reactivity. The idea of making the robot responsive to its environment adds an exciting layer of interactivity we both want to pursue.
+
+10/30/2025 - Visual Enhancements and Radio Communication:
+
+Today marked a major leap in expressiveness for our robot. We began by installing LED lights for the eyes, carefully embedding them behind the face plate to achieve a natural glow effect without visible hardware. My main contribution was soldering the resistors and wiring the LEDs to the appropriate digital pins, ensuring consistent brightness and avoiding voltage overload.
+
+On the coding side, I worked on the LED control functions — programming patterns to simulate blinking and emotional responses (idle pulse, alert flash, and synchronized eye movement cues). The subtle lighting effects brought surprising personality to the robot’s expression, especially in dim environments. Started with the setup of the nRF Servo Mega Shield setup for receiver transmitter communication.
+
+10/31/2025:Radio Communication
+We tackled the nRF Servo Mega Shield setup to establish wireless communication between the transmitter and receiver. I attached the radio to aurdino then started with debugging the radio initialization issues; tracing back the failure to a mismatched CE/CSN pin configuration. After correcting the wiring and recompiling the code, we successfully uploaded the transmitter and receiver sketches. The moment the remote control finally communicated with the main board felt like a breakthrough.
+
 
 
 ### Progress Photos:
