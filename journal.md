@@ -70,6 +70,15 @@ On the coding side, I worked on the LED control functions — programming patter
 We tackled the nRF Servo Mega Shield setup to establish wireless communication between the transmitter and receiver. I attached the radio to aurdino then started with debugging the radio initialization issues; tracing back the failure to a mismatched CE/CSN pin configuration. After correcting the wiring and recompiling the code, we successfully uploaded the transmitter and receiver sketches. The moment the remote control finally communicated with the main board felt like a breakthrough.
 
 
+What did you accomplish for today November 6?
+fixed the servo with weight issues in thr right shoulder
+What features remain to be implemented?
+radio connection issue and music board
+What will you accomplish for next Thursday November 11?
+Fixed the reciver transmitter issue and soldered the music board, connection is estabisled sucessfully
+
+
+
 
 ### Progress Photos:
 ![IMG_0062](https://github.com/user-attachments/assets/f2525f6e-866a-44b1-ae06-0c0e2922bd07)
