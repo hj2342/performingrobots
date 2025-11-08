@@ -69,14 +69,16 @@ On the coding side, I worked on the LED control functions — programming patter
 10/31/2025:Radio Communication
 We tackled the nRF Servo Mega Shield setup to establish wireless communication between the transmitter and receiver. I attached the radio to aurdino then started with debugging the radio initialization issues; tracing back the failure to a mismatched CE/CSN pin configuration. After correcting the wiring and recompiling the code, we successfully uploaded the transmitter and receiver sketches. The moment the remote control finally communicated with the main board felt like a breakthrough.
 
-
+Nov 6
 What did you accomplish for today November 6?
 fixed the servo with weight issues in thr right shoulder
 What features remain to be implemented?
 radio connection issue and music board
 What will you accomplish for next Thursday November 11?
-Fixed the reciver transmitter issue and soldered the music board, connection is estabisled sucessfully
+Fixed the reciver transmitter issue and soldered the music board, connection is estabisled sucessfully and using neo strips to great a aura around the robot during emotions and also getting inspiration from cartoons to bring emotions like jealousy
 
+Nov 11
+who able to play any sound clip (who was that?) and who was able to drive their robot? It was our robot Volta White which is the hisband belongs to Hariharan and Ali
 
 
 
