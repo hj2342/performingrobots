@@ -76,22 +76,22 @@ void loop() {
 // | Tense / Nervous      | Flickering white          | Anxiety, high stakes moments |
 // | Neutral / Default    | White soft glow           | Calm baseline state          |
   // Map emotions to time slots
-  if (modTime < 5000) {           // Calm / Thinking
+  if (modTime < 5000) {           // Calm / Thinking Soft blue glow
     pulsePattern(0, 0, 255, 80, 30);
-  } else if (modTime < 10000) {   // Happy / Lighthearted
+  } else if (modTime < 10000) {   // Happy / Lighthearted. Green flow/wave
     flowPattern(0, 255, 0, 40);
-  } else if (modTime < 15000) {   // Angry / Frustrated
+  } else if (modTime < 15000) {   // Angry / Frustrated Red pulse
     pulsePattern(255, 0, 0, 80, 20);
-  } else if (modTime < 20000) {   // Sad / Reflective
+  } else if (modTime < 20000) {   // Sad / Reflective Purple slow fade
     pulsePattern(150, 0, 255, 100, 40);
-  } else if (modTime < 25000) {   // Suspicious / Cunning
+  } else if (modTime < 25000) {   // Suspicious / Cunning Yellow chase
     flowPattern(255, 255, 0, 30);
-  } else if (modTime < 30000) {   // Evil / Heisenberg
+  } else if (modTime < 30000) {   // Evil / Heisenberg Orange-red gradient pulse
     pulsePattern(255, 100, 0, 80, 25);
-  } else if (modTime < 35000) {   // Tense / Nervous
+  } else if (modTime < 35000) {   // Tense / Nervous Flickering white
     flickerPattern(255, 255, 255, 30, 80);
-  } else {                         // Neutral / Default
+  } else {                         // Neutral / Default White soft glow
     pulsePattern(255, 255, 255, 50, 40);
   }
-
+}
 
