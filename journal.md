@@ -203,6 +203,13 @@ Tried again thinking it was a temporary error. Same result. Checked their docume
 Spent the next two hours researching alternatives. Tried several platforms but quality was poor or pricing was too expensive. Getting desperate - we need these recordings done soon for integration. Finally discovered HumeAI right before midnight. They offer a free tier with 10,000 characters. Created an account and verified it works with my IP - success! Will start the actual voice generation tomorrow.
 
 
+glue back and front to robot: half done (face) rest will be done on wednesday 26 nov 
+3D arms: 25 nov
+cases: done 
+hands: 26 nov
+clothing: done on nov 20
+wire management: done on Monday Nov 24
+
 ### Progress Photos:
 ![IMG_0062](https://github.com/user-attachments/assets/f2525f6e-866a-44b1-ae06-0c0e2922bd07)
 ![IMG_0058](https://github.com/user-attachments/assets/baa65f53-3f83-460b-9027-806c4bbea2d0)
