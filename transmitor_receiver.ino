@@ -56,11 +56,11 @@
 
 // CHANGEHERE
 // For the transmitter
-// const int NRF_CE_PIN = A4, NRF_CSN_PIN = A5;
+const int NRF_CE_PIN = A4, NRF_CSN_PIN = A5;
 
 // CHANGEHERE
 // for the receiver
-const int NRF_CE_PIN = A11, NRF_CSN_PIN = A15;
+// const int NRF_CE_PIN = A11, NRF_CSN_PIN = A15;
 
 // nRF 24L01 pin   name
 //          1      GND
@@ -129,402 +129,504 @@ void setupRF24Common() {
 
 // Transmitter code
 
-// // Transmitter pin usage
-// const int LCD_RS_PIN = 3, LCD_EN_PIN = 2, LCD_D4_PIN = 4, LCD_D5_PIN = 5, LCD_D6_PIN = 6, LCD_D7_PIN = 7;
-// const int SW1_PIN = 8, SW2_PIN = 9, SW3_PIN = 10, SW4_PIN = A3, SW5_PIN = A2;
+// Transmitter pin usage
+const int LCD_RS_PIN = 3, LCD_EN_PIN = 2, LCD_D4_PIN = 4, LCD_D5_PIN = 5, LCD_D6_PIN = 6, LCD_D7_PIN = 7;
+const int SW1_PIN = 8, SW2_PIN = 9, SW3_PIN = 10, SW4_PIN = A3, SW5_PIN = A2;
 
-// // LCD library code
-// #include <LiquidCrystal.h>
+// LCD library code
+#include <LiquidCrystal.h>
 
-// // initialize the library with the relevant pins
-// LiquidCrystal lcd(LCD_RS_PIN, LCD_EN_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
+// initialize the library with the relevant pins
+LiquidCrystal lcd(LCD_RS_PIN, LCD_EN_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
 
-// const int NUM_OF_STATES = 6;
+const int NUM_OF_STATES = 29;
 // char* theStates[] = { "0 robot wakes",
 //                       "1 robot hello",
 //                       "2 robot explains",
 //                       "3 robot pleads",
 //                       "4 robot weeps",
 //                       "5 robot goodbye" };
-
-// void updateLCD() {
-
-//   lcd.clear();
-//   lcd.print(theStates[data.stateNumber]);
-//   lcd.setCursor(0, 1);  // column, line (from 0)
-//   lcd.print("not transmitted yet");
-// }
-
-// void countDown() {
-//   data.stateNumber = (data.stateNumber > 0) ? (data.stateNumber - 1) : 0;
-//   updateLCD();
-// }
-
-// void countUp() {
-//   if (++data.stateNumber >= NUM_OF_STATES) {
-//     data.stateNumber = NUM_OF_STATES - 1;
-//   }
-//   updateLCD();
-// }
+char* theStates[29] = { "" };
 
 
-// void spare1() {}
-// void spare2() {}
+void updateLCD() {
 
-// void rf24SendData() {
+  lcd.clear();
+  lcd.print(theStates[data.stateNumber]);
+  lcd.setCursor(0, 1);  // column, line (from 0)
+  lcd.print("not transmitted yet");
+}
 
-//   radio.stopListening();  // go into transmit mode
-//   // The write() function will block
-//   // until the message is successfully acknowledged by the receiver
-//   // or the timeout/retransmit maxima are reached.
-//   int retval = radio.write(&data, sizeof(data));
+void countDown() {
+  data.stateNumber = (data.stateNumber > 0) ? (data.stateNumber - 1) : 0;
+  updateLCD();
+}
 
-//   lcd.clear();
-//   lcd.setCursor(0, 0);  // column, line (from 0)
-//   lcd.print("transmitting");
-//   lcd.setCursor(14, 0);  // column, line (from 0)
-//   lcd.print(data.stateNumber);
-
-//   Serial.print(F(" ... "));
-//   if (retval) {
-//     Serial.println(F("success"));
-//     lcd.setCursor(0, 1);  // column, line (from 0)
-//     lcd.print("success");
-//   } else {
-//     totalTransmitFailures++;
-//     Serial.print(F("failure, total failures = "));
-//     Serial.println(totalTransmitFailures);
-
-//     lcd.setCursor(0, 1);  // column, line (from 0)
-//     lcd.print("error, total=");
-//     lcd.setCursor(13, 1);  // column, line (from 0)
-//     lcd.print(totalTransmitFailures);
-//   }
-// }
-
-// class Button {
-//   int pinNumber;
-//   bool previousState;
-//   void (*buttonFunction)();
-// public:
-
-//   // Constructor
-//   Button(int pn, void* bf) {
-//     pinNumber = pn;
-//     buttonFunction = bf;
-//     previousState = 1;
-//   }
-
-//   // update the button
-//   void update() {
-//     bool currentState = digitalRead(pinNumber);
-//     if (currentState == LOW && previousState == HIGH) {
-//       Serial.print("button on pin ");
-//       Serial.print(pinNumber);
-//       Serial.println();
-//       buttonFunction();
-//     }
-//     previousState = currentState;
-//   }
-// };
-
-// const int NUMBUTTONS = 5;
-// Button theButtons[] = {
-//   Button(SW1_PIN, countDown),
-//   Button(SW2_PIN, rf24SendData),
-//   Button(SW3_PIN, countUp),
-//   Button(SW4_PIN, spare1),
-//   Button(SW5_PIN, spare2),
-// };
-
-// void setupRF24() {
-
-//   setupRF24Common();
-
-//   // Set us as a transmitter
-//   radio.openWritingPipe(xmtrAddress);
-//   radio.openReadingPipe(1, rcvrAddress);
-
-//   // radio.printPrettyDetails();
-//   Serial.println(F("I am a transmitter"));
-
-//   data.stateNumber = 0;
-// }
-
-// void setup() {
-//   Serial.begin(9600);
-//   Serial.println(F("Setting up LCD"));
-
-//   // set up the LCD's number of columns and rows:
-//   lcd.begin(16, 2);
-//   lcd.clear();
-//   // Print a message to the LCD.
-//   lcd.print("Radio setup");
-
-//   // Display the address in hex
-//   lcd.setCursor(0, 1);
-//   lcd.print("addr 0x");
-//   lcd.setCursor(7, 1);
-//   char s[5];
-//   sprintf(s, "%02x", CUSTOM_ADDRESS_BYTE);
-//   lcd.print(s);
-
-//   // Display the channel number
-//   lcd.setCursor(10, 1);
-//   lcd.print("ch");
-//   lcd.setCursor(13, 1);
-//   lcd.print(CUSTOM_CHANNEL_NUMBER);
-
-//   Serial.println(F("Setting up radio"));
-//   setupRF24();
-
-//   // If setupRF24 returned then the radio is set up
-//   lcd.setCursor(0, 0);
-//   lcd.print("Radio OK state=");
-//   lcd.print(theStates[data.stateNumber]);
-
-//   // Initialize the switches
-//   pinMode(SW1_PIN, INPUT_PULLUP);
-//   pinMode(SW2_PIN, INPUT_PULLUP);
-//   pinMode(SW3_PIN, INPUT_PULLUP);
-//   pinMode(SW4_PIN, INPUT_PULLUP);
-//   pinMode(SW5_PIN, INPUT_PULLUP);
-// }
+void countUp() {
+  if (++data.stateNumber >= NUM_OF_STATES) {
+    data.stateNumber = NUM_OF_STATES - 1;
+  }
+  updateLCD();
+}
 
 
+void spare1() {}
+void spare2() {}
 
-// void loop() {
-//   for (int i = 0; i < NUMBUTTONS; i++) {
-//     theButtons[i].update();
-//   }
-//   delay(50);  // for testing
-// }
+void rf24SendData() {
+
+  radio.stopListening();  // go into transmit mode
+  // The write() function will block
+  // until the message is successfully acknowledged by the receiver
+  // or the timeout/retransmit maxima are reached.
+  int retval = radio.write(&data, sizeof(data));
+
+  lcd.clear();
+  lcd.setCursor(0, 0);  // column, line (from 0)
+  lcd.print("transmitting");
+  lcd.setCursor(14, 0);  // column, line (from 0)
+  lcd.print(data.stateNumber);
+
+  Serial.print(F(" ... "));
+  if (retval) {
+    Serial.println(F("success"));
+    lcd.setCursor(0, 1);  // column, line (from 0)
+    lcd.print("success");
+  } else {
+    totalTransmitFailures++;
+    Serial.print(F("failure, total failures = "));
+    Serial.println(totalTransmitFailures);
+
+    lcd.setCursor(0, 1);  // column, line (from 0)
+    lcd.print("error, total=");
+    lcd.setCursor(13, 1);  // column, line (from 0)
+    lcd.print(totalTransmitFailures);
+  }
+}
+
+class Button {
+  int pinNumber;
+  bool previousState;
+  void (*buttonFunction)();
+public:
+
+  // Constructor
+  Button(int pn, void* bf) {
+    pinNumber = pn;
+    buttonFunction = bf;
+    previousState = 1;
+  }
+
+  // update the button
+  void update() {
+    bool currentState = digitalRead(pinNumber);
+    if (currentState == LOW && previousState == HIGH) {
+      Serial.print("button on pin ");
+      Serial.print(pinNumber);
+      Serial.println();
+      buttonFunction();
+    }
+    previousState = currentState;
+  }
+};
+
+const int NUMBUTTONS = 5;
+Button theButtons[] = {
+  Button(SW1_PIN, countDown),
+  Button(SW2_PIN, rf24SendData),
+  Button(SW3_PIN, countUp),
+  Button(SW4_PIN, spare1),
+  Button(SW5_PIN, spare2),
+};
+
+void setupRF24() {
+
+  setupRF24Common();
+
+  // Set us as a transmitter
+  radio.openWritingPipe(xmtrAddress);
+  radio.openReadingPipe(1, rcvrAddress);
+
+  // radio.printPrettyDetails();
+  Serial.println(F("I am a transmitter"));
+
+  data.stateNumber = 0;
+}
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println(F("Setting up LCD"));
+
+  // set up the LCD's number of columns and rows:
+  lcd.begin(16, 2);
+  lcd.clear();
+  // Print a message to the LCD.
+  lcd.print("Radio setup");
+
+  // Display the address in hex
+  lcd.setCursor(0, 1);
+  lcd.print("addr 0x");
+  lcd.setCursor(7, 1);
+  char s[5];
+  sprintf(s, "%02x", CUSTOM_ADDRESS_BYTE);
+  lcd.print(s);
+
+  // Display the channel number
+  lcd.setCursor(10, 1);
+  lcd.print("ch");
+  lcd.setCursor(13, 1);
+  lcd.print(CUSTOM_CHANNEL_NUMBER);
+
+  Serial.println(F("Setting up radio"));
+  setupRF24();
+
+  // If setupRF24 returned then the radio is set up
+  lcd.setCursor(0, 0);
+  lcd.print("Radio OK state=");
+  lcd.print(theStates[data.stateNumber]);
+
+  // Initialize the switches
+  pinMode(SW1_PIN, INPUT_PULLUP);
+  pinMode(SW2_PIN, INPUT_PULLUP);
+  pinMode(SW3_PIN, INPUT_PULLUP);
+  pinMode(SW4_PIN, INPUT_PULLUP);
+  pinMode(SW5_PIN, INPUT_PULLUP);
+}
 
 
-// void clearData() {
-//   // set all fields to 0
-//   data.stateNumber = 0;
-// }
+
+void loop() {
+  for (int i = 0; i < NUMBUTTONS; i++) {
+    theButtons[i].update();
+  }
+  delay(50);  // for testing
+}
+
+
+void clearData() {
+  // set all fields to 0
+  data.stateNumber = 0;
+}
 
 // End of transmitter code
 // CHANGEHERE
 
 
-// Receiver Code
-// CHANGEHERE
+// // Receiver Code
+// // CHANGEHERE
 
-// Additional libraries for music maker shield
-#include <Adafruit_VS1053.h>
-#include <SD.h>
+// // Additional libraries for music maker shield
+// #include <Adafruit_VS1053.h>
+// #include <SD.h>
 
-// Servo library
-#include <Servo.h>
+// // Servo library
+// #include <Servo.h>
 
-// Additional libraries for graphics on the Neo Pixel Matrix
-#include <Adafruit_NeoPixel.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_NeoMatrix.h>
-#ifndef PSTR
-#define PSTR // Make Arduino Due happy
-#endif
+// // Additional libraries for graphics on the Neo Pixel Matrix
+// // Additional libraries for graphics on the Neo Pixel Matrix
+// #include <Adafruit_NeoPixel.h>
+// #include <Adafruit_GFX.h>
+// #include <Adafruit_NeoMatrix.h>
+// #ifndef PSTR
+// #define PSTR // Make Arduino Due happy
+// #endif
 
-// Additional pin usage for receiver
+// #define EYE1_PIN 2
+// #define EYE2_PIN 5
+// #define CROWN_PIN 8
 
-// Adafruit music maker shield
-#define SHIELD_RESET -1  // VS1053 reset pin (unused!)
-#define SHIELD_CS 7      // VS1053 chip select pin (output)
-#define SHIELD_DCS 6     // VS1053 Data/command select pin (output)
-#define CARDCS 4         // Card chip select pin
-// DREQ should be an Int pin, see http://arduino.cc/en/Reference/attachInterrupt
-#define DREQ 3  // VS1053 Data request, ideally an Interrupt pin
-Adafruit_VS1053_FilePlayer musicPlayer = Adafruit_VS1053_FilePlayer(SHIELD_RESET, SHIELD_CS, SHIELD_DCS, DREQ, CARDCS);
+// #define NUM_EYES 2
+// #define NUM_CROWN 28
 
-// Connectors for NeoPixels and Servo Motors are labeled
-// M1 - M6 which is not very useful. Here are the pin
-// assignments:
-// M1 = 19
-// M2 = 20
-// M3 = 21
-// M4 = 16
-// M5 = 18
-// M6 = 17
+// // Additional pin usage for receiver
 
-// Servo motors
-const int NOSE_SERVO_PIN = 20;
-//const int ANTENNA_SERVO_PIN = 10;
-//const int TAIL_SERVO_PIN = 11;
-//const int GRABBER_SERVO_PIN = 12;
+// // Adafruit music maker shield
+// #define SHIELD_RESET -1  // VS1053 reset pin (unused!)
+// #define SHIELD_CS 7      // VS1053 chip select pin (output)
+// #define SHIELD_DCS 6     // VS1053 Data/command select pin (output)
+// #define CARDCS 4         // Card chip select pin
+// // DREQ should be an Int pin, see http://arduino.cc/en/Reference/attachInterrupt
+// #define DREQ 3  // VS1053 Data request, ideally an Interrupt pin
+// Adafruit_VS1053_FilePlayer musicPlayer = Adafruit_VS1053_FilePlayer(SHIELD_RESET, SHIELD_CS, SHIELD_DCS, DREQ, CARDCS);
 
-// Neopixel
-const int NEOPIXELPIN = 18;
-const int NUMPIXELS = 64;
-//#define NEOPIXELPIN 18
-//#define NUMPIXELS 64  // change to fit
-//Adafruit_NeoPixel pixels(NUMPIXELS, NEOPIXELPIN, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, NEOPIXELPIN,
-                            NEO_MATRIX_TOP     + NEO_MATRIX_RIGHT +
-                            NEO_MATRIX_COLUMNS + NEO_MATRIX_PROGRESSIVE,
-                            NEO_GRB            + NEO_KHZ800);
+// // Connectors for NeoPixels and Servo Motors are labeled
+// // M1 - M6 which is not very useful. Here are the pin
+// // assignments:
+// // M1 = 19
+// // M2 = 20
+// // M3 = 21
+// // M4 = 16
+// // M5 = 18
+// // M6 = 17
 
-Servo nose;  // change names to describe what's moving
-Servo antenna;
-Servo tail;
-Servo grabber;
-Servo disk;
+// // Servo motors
+// const int NOSE_SERVO_PIN = 20;
+// //const int ANTENNA_SERVO_PIN = 10;
+// //const int TAIL_SERVO_PIN = 11;
+// //const int GRABBER_SERVO_PIN = 12;
 
-// change as per your robot
-const int NOSE_WRINKLE = 45;
-const int NOSE_TWEAK = 90;
-const int TAIL_ANGRY = 0;
-const int TAIL_HAPPY = 180;
-const int GRABBER_RELAX = 0;
-const int GRABBER_GRAB = 180;
+// // Neopixel
+// const int NEOPIXELPIN = 18;
+// const int NUMPIXELS = 64;
+// //#define NEOPIXELPIN 18
+// //#define NUMPIXELS 64  // change to fit
+// //Adafruit_NeoPixel pixels(NUMPIXELS, NEOPIXELPIN, NEO_GRB + NEO_KHZ800);
+// Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, NEOPIXELPIN,
+//                             NEO_MATRIX_TOP     + NEO_MATRIX_RIGHT +
+//                             NEO_MATRIX_COLUMNS + NEO_MATRIX_PROGRESSIVE,
+//                             NEO_GRB            + NEO_KHZ800);
 
-void setup() {
-  Serial.begin(9600);
-  // printf_begin();
+// Servo nose;  // change names to describe what's moving
+// Servo antenna;
+// Servo tail;
+// Servo grabber;
+// Servo disk;
 
-  // Set up all the attached hardware
-  setupMusicMakerShield();
-  setupServoMotors();
-  setupNeoPixels();
-
-  setupRF24();
-
-  // Brief flash to show we're done with setup()
-  flashNeoPixels();
-}
-
-void setupRF24() {
-  setupRF24Common();
-
-  // Set us as a receiver
-  radio.openWritingPipe(rcvrAddress);
-  radio.openReadingPipe(1, xmtrAddress);
-
-  // radio.printPrettyDetails();
-  Serial.println(F("I am a receiver"));
-}
-
-void setupMusicMakerShield() {
-  if (!musicPlayer.begin()) {  // initialise the music player
-    Serial.println(F("Couldn't find VS1053, do you have the right pins defined?"));
-    while (1)
-      ;
-  }
-  Serial.println(F("VS1053 found"));
-
-  if (!SD.begin(CARDCS)) {
-    Serial.println(F("SD card failed or not present"));
-    while (1)
-      ;  // don't do anything more
-  }
-
-  // Set volume for left, right channels. lower numbers == louder volume!
-  musicPlayer.setVolume(20, 20);
-
-  // Timer interrupts are not suggested, better to use DREQ interrupt!
-  //musicPlayer.useInterrupt(VS1053_FILEPLAYER_TIMER0_INT); // timer int
-
-  // If DREQ is on an interrupt pin (on uno, #2 or #3) we can do background
-  // audio playing
-  musicPlayer.useInterrupt(VS1053_FILEPLAYER_PIN_INT);  // DREQ int
-}
-
-void setupServoMotors() {
-  nose.attach(NOSE_SERVO_PIN);
-  nose.write(90);
-  //  antenna.attach(ANTENNA_SERVO_PIN);
-  //  tail.attach(TAIL_SERVO_PIN);
-  //  grabber.attach(GRABBER_SERVO_PIN);
-  //
-  //  tail.write(TAIL_HAPPY);
-}
-
-void setupNeoPixels() {
-  //  pixels.begin();
-  //  pixels.clear();
-  //  pixels.show();
-  matrix.begin();
-  matrix.setTextWrap(false);
-  matrix.setBrightness(40);
-  matrix.setTextColor(matrix.Color(200, 30, 40));
-}
-
-void flashNeoPixels() {
-
-  // Using the Matrix library
-  matrix.fillScreen(matrix.Color(0, 255, 0));
-  matrix.show();
-  delay(500);
-  matrix.fillScreen(0);
-  matrix.show();
-
-  //  // all on
-  //  for (int i = 0; i < NUMPIXELS; i++) {  // For each pixel...
-  //    pixels.setPixelColor(i, pixels.Color(0, 100, 0));
-  //  }
-  //  pixels.show();
-  //  delay(500);
-  //
-  //  // all off
-  //  pixels.clear();
-  //  pixels.show();
-}
-
-void loop() {
-  // If there is data, read it,
-  // and do the needfull
-  // Become a receiver
-  radio.startListening();
-  if (radio.available(&pipeNum)) {
-    radio.read(&data, sizeof(data));
-    Serial.print(F("message received Data = "));
-    Serial.print(data.stateNumber);
-    Serial.println();
-
-    switch (data.stateNumber) {
-      case 0:
-        tail.write(TAIL_ANGRY);
-        // play track 0
-        // display something on LEDs
-        break;
-      case 1:
-        Serial.print(F("moving nose to 180 and drawing rectangle"));
-        nose.write(180);
-
-        // matrix.drawRect(2, 2, 5, 5, matrix.Color(200, 90, 30));
-        // matrix.show();
-
-        Serial.println(F("Playing track 002"));
-        musicPlayer.startPlayingFile("/track002.mp3");
-
-        break;
-      case 2:
-        Serial.println(F("moving nose to 30"));
-        nose.write(30);
-
-        // // matrix.drawRect(2, 2, 5, 5, matrix.Color(0, 200, 30));
-        // matrix.show();
-
-        Serial.println(F("Playing track 001"));
-        musicPlayer.startPlayingFile("/track001.mp3");
-        break;
-      case 3:
-
-        break;
-      case 4:
-
-        break;
-
-      default:
-        Serial.println(F("Invalid option"));
-    }
+// // change as per your robot
+// const int NOSE_WRINKLE = 45;
+// const int NOSE_TWEAK = 90;
+// const int TAIL_ANGRY = 0;
+// const int TAIL_HAPPY = 180;
+// const int GRABBER_RELAX = 0;
+// const int GRABBER_GRAB = 180;
 
 
+// Adafruit_NeoPixel eye1(NUM_EYES, EYE1_PIN, NEO_GRB + NEO_KHZ800);
+// Adafruit_NeoPixel eye2(NUM_EYES, EYE2_PIN, NEO_GRB + NEO_KHZ800);
+// Adafruit_NeoPixel crown(NUM_CROWN, CROWN_PIN, NEO_GRB + NEO_KHZ800);
 
-  }
-}  // end of loop()
-// end of receiver code
-// CHANGEHERE
+
+// int baseBrightness = 80;
+
+
+// void setEyesColor(uint8_t r, uint8_t g, uint8_t b) {
+// for (int i = 0; i < NUM_EYES; i++) {
+// eye1.setPixelColor(i, eye1.Color(r, g, b));
+// eye2.setPixelColor(i, eye2.Color(r, g, b));
+// }
+// eye1.show();
+// eye2.show();
+// }
+
+
+// void crownPulse(uint8_t r, uint8_t g, uint8_t b, int delayTime) {
+// for (int i = 0; i < NUM_CROWN; i++) crown.setPixelColor(i, crown.Color(r, g, b));
+// crown.show();
+// delay(delayTime);
+// for (int i = 0; i < NUM_CROWN; i++) crown.setPixelColor(i, 0);
+// crown.show();
+// delay(delayTime);
+// }
+// void setup() {
+//   Serial.begin(9600);
+//   // printf_begin();
+
+//   eye1.begin();
+//   eye2.begin();
+//   crown.begin();
+//   eye1.setBrightness(baseBrightness);
+//   eye2.setBrightness(baseBrightness);
+//   crown.setBrightness(baseBrightness);
+
+//   setEyesColor(0,0,0);
+
+//   // Set up all the attached hardware
+//   setupMusicMakerShield();
+//   setupServoMotors();
+//   setupNeoPixels();
+
+//   setupRF24();
+
+//   // Brief flash to show we're done with setup()
+//   flashNeoPixels();
+// }
+
+// void setupRF24() {
+//   setupRF24Common();
+
+//   // Set us as a receiver
+//   radio.openWritingPipe(rcvrAddress);
+//   radio.openReadingPipe(1, xmtrAddress);
+
+//   // radio.printPrettyDetails();
+//   Serial.println(F("I am a receiver"));
+// }
+
+// void setupMusicMakerShield() {
+//   if (!musicPlayer.begin()) {  // initialise the music player
+//     Serial.println(F("Couldn't find VS1053, do you have the right pins defined?"));
+//     while (1)
+//       ;
+//   }
+//   Serial.println(F("VS1053 found"));
+
+//   if (!SD.begin(CARDCS)) {
+//     Serial.println(F("SD card failed or not present"));
+//     while (1)
+//       ;  // don't do anything more
+//   }
+
+//   // Set volume for left, right channels. lower numbers == louder volume!
+//   musicPlayer.setVolume(20, 20);
+
+//   // Timer interrupts are not suggested, better to use DREQ interrupt!
+//   //musicPlayer.useInterrupt(VS1053_FILEPLAYER_TIMER0_INT); // timer int
+
+//   // If DREQ is on an interrupt pin (on uno, #2 or #3) we can do background
+//   // audio playing
+//   musicPlayer.useInterrupt(VS1053_FILEPLAYER_PIN_INT);  // DREQ int
+// }
+// // Custom animation functions
+// void initial() {
+//   // Add your initial pose/animation here
+//   // Example: reset servos to starting positions
+//   nose.write(90);
+//   // tail.write(TAIL_HAPPY);
+//   // Add any other initialization movements
+//   Serial.println(F("Initial pose"));
+// }
+
+// void dab() {
+//   // Add your dab animation here
+//   // Example servo movements for a dabbing motion
+//   nose.write(45);
+//   delay(500);
+//   nose.write(135);
+//   delay(500);
+//   nose.write(90);
+//   Serial.println(F("Dab animation complete"));
+// }
+
+// void shoulder_flap() {
+//   // Add your shoulder flap animation here
+//   // Example:
+//   nose.write(60);
+//   delay(300);
+//   nose.write(120);
+//   delay(300);
+//   nose.write(90);
+//   Serial.println(F("Shoulder flap complete"));
+// }
+// void setupServoMotors() {
+//   nose.attach(NOSE_SERVO_PIN);
+//   nose.write(90);
+//   //  antenna.attach(ANTENNA_SERVO_PIN);
+//   //  tail.attach(TAIL_SERVO_PIN);
+//   //  grabber.attach(GRABBER_SERVO_PIN);
+//   //
+//   //  tail.write(TAIL_HAPPY);
+// }
+
+// void setupNeoPixels() {
+//   //  pixels.begin();
+//   //  pixels.clear();
+//   //  pixels.show();
+//   matrix.begin();
+//   matrix.setTextWrap(false);
+//   matrix.setBrightness(40);
+//   matrix.setTextColor(matrix.Color(200, 30, 40));
+// }
+
+// void flashNeoPixels() {
+
+//   // Using the Matrix library
+//   matrix.fillScreen(matrix.Color(0, 255, 0));
+//   matrix.show();
+//   delay(500);
+//   matrix.fillScreen(0);
+//   matrix.show();
+
+//   //  // all on
+//   //  for (int i = 0; i < NUMPIXELS; i++) {  // For each pixel...
+//   //    pixels.setPixelColor(i, pixels.Color(0, 100, 0));
+//   //  }
+//   //  pixels.show();
+//   //  delay(500);
+//   //
+//   //  // all off
+//   //  pixels.clear();
+//   //  pixels.show();
+// }
+
+// void loop() {
+//   // If there is data, read it,
+//   // and do the needfull
+//   // Become a receiver
+//   radio.startListening();
+//   if (radio.available(&pipeNum)) {
+//     radio.read(&data, sizeof(data));
+//     Serial.print(F("message received Data = "));
+//     Serial.print(data.stateNumber);
+//     Serial.println();
+
+//     switch (data.stateNumber) {
+//       case 0:
+//         tail.write(TAIL_ANGRY);
+//         // play track 0
+//         // display something on LEDs
+//         break;
+//       case 1:
+//         Serial.print(F("Case 1: NeoPixel Eyes + Crown + dab()"));
+
+
+//         // --- EYES ANIMATION ---
+//         setEyesColor(255, 50, 20); // bright orange "alert" eyes
+
+
+//         // --- CROWN ANIMATION ---
+//         for (int i = 0; i < 3; i++) {
+//         crownPulse(255, 100, 0, 150); // flashing gold pulse
+//         }
+
+
+//         nose.write(180);
+//         initial();
+//         delay(2000);
+
+
+//         dab();
+//         musicPlayer.startPlayingFile("/track002.mp3");
+//         break;
+
+//       case 2:
+//         Serial.print(F("Case 2: Eyes = calm blue, Crown = soft pulse"));
+
+
+//           // --- EYES ANIMATION ---
+//           setEyesColor(0, 80, 255); // calm blue
+
+
+//           // --- CROWN ANIMATION ---
+//           for (int i = 0; i < 5; i++) {
+//           crownPulse(0, 40, 200, 200); // slow blue pulse
+//           }
+
+
+//           nose.write(30);
+//           initial();
+//           delay(2000);
+
+
+//           musicPlayer.startPlayingFile("/track001.mp3");
+//           shoulder_flap();
+//           shoulder_flap();
+//           shoulder_flap();
+//           break;
+//       case 3:
+
+//         break;
+//       case 4:
+
+//         break;
+
+//       default:
+//         Serial.println(F("Invalid option"));
+//     }
+
+
+
+//   }
+// }  // end of loop()
+// // end of receiver code
+// // CHANGEHERE
