@@ -26,14 +26,17 @@ I researched servo torque requirements for lifting wooden arms and calculated ap
 
 The video of progress shows how much more "alive" the robot appears with proper arm proportions. I'm beginning to understand that robot performance isn't just about technical function - it's about creating believable character presence.
 
-photo here
+<img width="794" height="1030" alt="image" src="https://github.com/user-attachments/assets/5a4e23aa-fa74-4b12-91ba-369c04cb3964" />
+
 
 ## 10/08/2025 - Servo Integration Challenges:
 This evening presented fascinating problem-solving opportunities. While my teammate wrestled with the face servo mounting, I worked on organizing our wiring strategy. The copper wire mesh solution my partner developed was brilliant - it taught me that sometimes unconventional approaches work better than standard adhesives.
 
-I prepared the pan-tilt assembly components, organizing all M3 bolts and nuts before installation. My contribution was ensuring we had proper spacing measurements to avoid the servo interference issues. I learned that in robotics, a few millimeters can mean the difference between smooth operation and mechanical binding.
+I prepared the pan-tilt assembly components, organizing all M5 bolts and nuts before installation. My contribution was ensuring we had proper spacing measurements to avoid the servo interference issues. I learned that in robotics, a few millimeters can mean the difference between smooth operation and mechanical binding.
 
 The three-servo setup (face, shoulder, forearm) creates exciting performance possibilities. I'm already imagining choreographed movements that could make Walter White's characteristic gestures recognizable.
+<img width="794" height="1030" alt="image" src="https://github.com/user-attachments/assets/3c6d79bc-cbba-43f6-b986-b9b562d3854e" />
+
 
 ## 10/09/2025 - Electronics Architecture and System Integration:
 Today I focused intensively on understanding our electronics hierarchy. While the Arduino Mega 2560 and custom PCB were being installed, I documented the pin connections meticulously - D20, D21, D19, D17, D16, D18. Creating a clear wiring diagram became my priority, knowing we'd need this reference during programming and troubleshooting.
@@ -77,19 +80,22 @@ We tackled the nRF Servo Mega Shield setup to establish wireless communication b
 
 
 ##11/02/2025 - Radio Debugging Breakthrough:
+
 Came in early today determined to fix the radio communication. Started by swapping the nRF modules between transmitter and receiver to isolate whether it was a hardware or configuration issue. Both modules worked individually when tested with simple ping-pong sketches.
 The breakthrough came when I discovered the CE/CSN pin configuration in our code didn't match the actual shield wiring. The shield used different pins than the standard setup I'd been referencing. After correcting the pin definitions and recompiling, we successfully uploaded the transmitter and receiver sketches. The moment the remote control finally communicated with the main board felt like a breakthrough - seeing "Data received" in the serial monitor was incredibly satisfying.
 Tested basic servo commands wirelessly. Movement was responsive but occasionally dropped packets. Made a note to implement acknowledgment protocols later.
 
 ##11/04/2025 - Music Board Research and Power Issues:
+
 Today I focused on integrating the DFPlayer Mini music board. Spent time understanding the serial communication protocol and wiring requirements. Connected the module to the Mega using SoftwareSerial on pins 10 and 11, with the speaker output connected through a small amplifier circuit.
 Initial power-up seemed fine, but when I tried to trigger audio playback while servos were moving, the board would reset. Classic power supply problem - the sudden current draw from servo movements was causing voltage dips that crashed the music board.
 Researched solutions and decided we need to implement separate power regulation for the audio system. Ordered some capacitors to add to the power rails for smoothing. Also realized we need to properly format the SD card with the correct file structure for the DFPlayer.
-
+<img width="337" height="415" alt="Screenshot 2025-12-17 at 6 17 36 AM" src="https://github.com/user-attachments/assets/e480de5a-bbe2-493f-9fae-e29373317de2" />
 ##11/06/2025 - Shoulder Servo Weight Issues:
 Today we fixed the servo with weight issues in the right shoulder. The servo was struggling to maintain position under load, causing the arm to droop during operation. After testing different positions and checking the mounting points, we confirmed it was a mechanical stress issue rather than electrical.
 The servo would move to position but couldn't hold it - the arm would slowly sag down despite full power. Checked our calculations and realized the 20kg servo was right at its limit with the arm weight and leverage. Ordered a 35kg servo as replacement but it won't arrive until next week.
 What features remain to be implemented? Radio connection stability improvements, music board integration with proper power management, and the emotional lighting system I've been planning.
+<img width="397" height="515" alt="Screenshot 2025-12-17 at 6 25 08 AM" src="https://github.com/user-attachments/assets/0fcdb843-8d02-4a84-9ee4-b23cd9b6ddee" />
 
 Nov 6
 What did you accomplish for today November 6?
@@ -120,7 +126,15 @@ Anger test: Pulsing red (255,0,0) with sharp 100ms transitions - visually aggres
 Happiness test: Alternating yellow-orange with 300ms fade - felt cheerful and energetic
 Sadness test: Deep blue wave (0,0,150) with 2-second cycles - genuinely melancholic
 Jealousy test: Green pulse (100,200,50) with irregular timing - unsettling effect
+
 Documented all the RGB values and timing parameters in a spreadsheet. The dimming curves matter enormously - exponential fade looks much more natural than linear.
+
+<img width="371" height="515" alt="Screenshot 2025-12-17 at 6 30 59 AM" src="https://github.com/user-attachments/assets/044a365a-ddde-4f62-8e7f-759aed659a66" />
+<img width="371" height="515" alt="Screenshot 2025-12-17 at 6 31 11 AM" src="https://github.com/user-attachments/assets/81e037f5-0690-41f5-b084-5b857c299a66" />
+<img width="371" height="431" alt="Screenshot 2025-12-17 at 6 31 41 AM" src="https://github.com/user-attachments/assets/51eb1318-0e23-42a1-9a88-1164a769d4cb" />
+<img width="371" height="431" alt="Screenshot 2025-12-17 at 6 32 17 AM" src="https://github.com/user-attachments/assets/7c8231d3-fbfb-4a0c-b42c-54d212b59e50" />
+
+
 
 ##11/11/2025 - First Performance Demonstration and Crown Planning:
 Major milestone today! We were able to play any sound clip (including the iconic "laugh?" line) and successfully drive our robot. Volta White - our creation belonging to Hariharan and Ali - performed flawlessly during the demonstration. The combination of audio playback and wireless control finally working together felt incredibly rewarding.
@@ -138,7 +152,9 @@ Made it through about half the crown before calling it a day. My eyes were getti
 Finished the remaining crown soldering this morning. The circular shape came out well - uniform spacing between pixels and solid connections throughout. Added heat shrink tubing over exposed solder joints for protection and durability.
 Connected the crown to an Arduino Mega for testing. Wrote test code to cycle through all the emotional states we'd defined. Ran into an immediate problem - some LEDs were significantly dimmer than others. Grabbed my magnifying glass and found two cold solder joints where the connection was weak.
 Reflowed those joints with fresh solder and suddenly everything looked perfect. The crown lit up beautifully, casting ambient colored light that genuinely affected the perceived mood. Testing each emotion:
-
+<img width="397" height="515" alt="Screenshot 2025-12-17 at 6 25 25 AM" src="https://github.com/user-attachments/assets/a012ddbb-8b8f-48f4-bbac-e6d0fcea71d5" />
+<img width="397" height="515" alt="Screenshot 2025-12-17 at 6 25 43 AM" src="https://github.com/user-attachments/assets/0070bcbb-bb92-4c2f-a791-41d3a0de0542" />
+<img width="1072" height="1030" alt="image" src="https://github.com/user-attachments/assets/f40a5a6f-f7d0-4070-97fe-89b052e18e89" />
 Anger: Aggressive red waves looked fantastic
 Happiness: Yellow sparkle pattern was delightful
 Jealousy: The green pulse was appropriately creepy
@@ -184,30 +200,31 @@ Research led me to non-blocking timing approaches using millis(). Started refact
  I  replaced the servo horn crown with a higher quality  one that came with the new servo. The star plastic horn we'd been using showed stress cracks - another sign we'd been overloading the old servo.T he new 35kg servo! Immediately began installation. Had to slightly enlarge the mounting holes since the new servo had a different horn size, but the process was straightforward.
 After installation and recalibration, the improvement was dramatic. The arm moved smoothly with no strain, held position solidly even when pushed, and responded quickly to commands. Tested the full range of motion multiple times - absolutely solid performance.
 Running movement sequences that had caused the old servo to struggle, the new one handled them effortlessly. The difference between marginal and adequate torque rating is night and day.
-  unsigned long previousMillis = 0;
-int animationState = 0;
-
-void updateLightsNonBlocking() {
-  unsigned long currentMillis = millis();
-  
-  if (currentMillis - previousMillis >= 500) {
-    previousMillis = currentMillis;
-    
-    if (animationState == 0) {
-      setEyesColor(255, 0, 0);
-      animationState = 1;
-    } else {
-      setEyesColor(0, 0, 0);
-      animationState = 0;
-    }
-  }
-  
-  // Crown updates happen independently without blocking
-  crown.show();
+        unsigned long previousMillis = 0;
+      int animationState = 0;
+      
+      void updateLightsNonBlocking() {
+        unsigned long currentMillis = millis();
+        
+        if (currentMillis - previousMillis >= 500) {
+          previousMillis = currentMillis;
+          
+          if (animationState == 0) {
+            setEyesColor(255, 0, 0);
+            animationState = 1;
+          } else {
+            setEyesColor(0, 0, 0);
+            animationState = 0;
+          }
+        }
+        
+        // Crown updates happen independently without blocking
+        crown.show();
 }
 
 
 ##11/19/2025 - The Great Robot Catastrophe:
+
 Came into the lab this afternoon to find our robot on the floor. Someone had knocked it over - not sure if it was accidental or carelessness, but the damage was extensive.
 The chest plate had broken completely free, screws ripped out of the wood. The back panel was hanging by a single mounting point. Worst of all, the face assembly - the piece we'd spent hours perfecting - was completely dismantled. The jaw mechanism was bent, the face plate cracked, and the eye LED wiring pulled loose.
 Stood there for a moment just processing the damage. Then got to work.
@@ -225,6 +242,11 @@ Began the tedious process of soldering header pins to match the Mega's layout. T
 Feeling energized by finally having working systems, I decided to tackle the costume aspect. Needed a mental break from electronics anyway. Visited a local costume shop to find appropriate attire for our Walter White robot.
 Found a navy captain's suit that had potential - the pants fit our robot's proportions perfectly, but the coat was too restrictive around the shoulder servos. I could see immediately that the fabric would bind against the servo housing during movement.
 After discussing options with my teammate, we agreed a sleeveless vest would be the better choice. This would maintain a dressed, professional appearance while keeping the shoulder motors completely unobstructed. The freedom of movement is too important to sacrifice for aesthetics.
+
+<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/4c8e2f5a-e162-4fdc-8498-7e1a1521e3ab" />
+<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/c3d3f9bf-35ed-496d-a417-f67eaa90032f" />
+
+
 
 ##11/21/2025 - Shield Wiring Crisis and Servo Failure:
 Continued shield work this morning. Soldered bus lines for 5V and ground across the board, with connection points for the NeoPixel power. Double-checked polarity multiple times. Connected the NeoPixel data wire to digital pin 6.
@@ -273,54 +295,54 @@ import requests
 import time
 import os
 
-# Load dialogue CSV
-df = pd.read_csv('husband_dialogues.csv')
-
-# HumeAI API configuration
-API_URL = "https://api.hume.ai/v0/batch/jobs"
-API_KEY = "your_api_key_here"
-
-output_dir = "husband_audio"
-os.makedirs(output_dir, exist_ok=True)
-
-for index, row in df.iterrows():
-    payload = {
-        "text": row['dialogue_text'],
-        "voice": {
-            "provider": "hume",
-            "emotion": row['emotion_tag']
-        },
-        "output_format": "mp3",
-        "sample_rate": 22050
-    }
-    
-    headers = {
-        "X-Hume-Api-Key": API_KEY,
-        "Content-Type": "application/json"
-    }
-    
-    response = requests.post(API_URL, json=payload, headers=headers)
-    
-    if response.status_code == 200:
-        audio_data = response.content
-        filename = f"husband_audio/dialogue_{str(row['line_number']).zfill(2)}.mp3"
-        with open(filename, 'wb') as f:
-            f.write(audio_data)
-        print(f"✓ Generated: {filename}")
-    else:
-        print(f"✗ Error on line {row['line_number']}: {response.status_code}")
-    
-    time.sleep(2)  # Rate limiting
-
-print(f"\nCompleted! Generated {len(df)} audio files.")
-```
-
-The automation worked beautifully! Processed all dialogue lines and saved them to the `husband_audio` folder with systematic naming: dialogue_01.mp3, dialogue_02.mp3, etc.
-
-<img width="2430" height="676" alt="image" src="https://github.com/user-attachments/assets/31dcba15-5524-45c7-bce6-703d2b6547cf" />
-
-<img width="636" height="908" alt="image" src="https://github.com/user-attachments/assets/b8c7e38f-b829-4d08-8ac3-c9de35064c70" />
-
+      # Load dialogue CSV
+      df = pd.read_csv('husband_dialogues.csv')
+      
+      # HumeAI API configuration
+      API_URL = "https://api.hume.ai/v0/batch/jobs"
+      API_KEY = "your_api_key_here"
+      
+      output_dir = "husband_audio"
+      os.makedirs(output_dir, exist_ok=True)
+      
+      for index, row in df.iterrows():
+          payload = {
+              "text": row['dialogue_text'],
+              "voice": {
+                  "provider": "hume",
+                  "emotion": row['emotion_tag']
+              },
+              "output_format": "mp3",
+              "sample_rate": 22050
+          }
+          
+          headers = {
+              "X-Hume-Api-Key": API_KEY,
+              "Content-Type": "application/json"
+          }
+          
+          response = requests.post(API_URL, json=payload, headers=headers)
+          
+          if response.status_code == 200:
+              audio_data = response.content
+              filename = f"husband_audio/dialogue_{str(row['line_number']).zfill(2)}.mp3"
+              with open(filename, 'wb') as f:
+                  f.write(audio_data)
+              print(f"✓ Generated: {filename}")
+          else:
+              print(f"✗ Error on line {row['line_number']}: {response.status_code}")
+          
+          time.sleep(2)  # Rate limiting
+      
+            print(f"\nCompleted! Generated {len(df)} audio files.")
+      ```
+      
+      The automation worked beautifully! Processed all dialogue lines and saved them to the `husband_audio` folder with systematic naming: dialogue_01.mp3, dialogue_02.mp3, etc.
+      
+      <img width="2430" height="676" alt="image" src="https://github.com/user-attachments/assets/31dcba15-5524-45c7-bce6-703d2b6547cf" />
+      
+      <img width="636" height="908" alt="image" src="https://github.com/user-attachments/assets/b8c7e38f-b829-4d08-8ac3-c9de35064c70" />
+      
 
 
 
@@ -334,18 +356,19 @@ Started planning the integration architecture. Need to synchronize:
 - **Audio**: VS1053 music board reading from SD card
 
 Sketched out the state machine approach:
-```
-Radio Command Received (state 1-15) 
-    ↓
-Load Dialogue Sequence
-    ↓
-Trigger Audio Playback (non-blocking)
-    ↓
-Set NeoPixel Mood
-    ↓
-Execute Servo Choreography with timestamps
-    ↓
-Return to Idle State
+
+      Radio Command Received (state 1-15) 
+          ↓
+      Load Dialogue Sequence
+          ↓
+      Trigger Audio Playback (non-blocking)
+          ↓
+      Set NeoPixel Mood
+          ↓
+      Execute Servo Choreography with timestamps
+          ↓
+      Return to Idle State
+
 <img width="1974" height="1212" alt="image" src="https://github.com/user-attachments/assets/279c7e4c-498e-4c0a-b29c-0f933f84c696" />
 
 11/27/2025 - Hand Construction and Shoulder Enhancement:
@@ -970,6 +993,7 @@ We documented the three falls today. Each time I had to check and repair the mus
 **Fall 3:** Cardboard enclosure crushed - rebuilt with thicker material
 
 ![IMG_5189](https://github.com/user-attachments/assets/1433e333-619c-49fd-81bf-083f682f1c03)
+<img width="708" height="432" alt="image" src="https://github.com/user-attachments/assets/8489c886-c98b-4450-a321-4a9ea06b6fb6" />
 
 
 After each fall, ran full system tests:
