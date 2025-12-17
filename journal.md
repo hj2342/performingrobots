@@ -987,12 +987,11 @@ We documented the three falls today. Each time I had to check and repair the mus
 **Fall 2:** Header pin bent - carefully straightened with pliers
 **Fall 3:** Cardboard enclosure crushed - rebuilt with thicker material
 
-![IMG_5189](https://github.com/user-attachments/assets/1433e333-619c-49fd-81bf-083f682f1c03)
 <img width="708" height="432" alt="image" src="https://github.com/user-attachments/assets/8489c886-c98b-4450-a321-4a9ea06b6fb6" />
 
 
 After each fall, ran full system tests:
-```
+
 ✓ Radio communication
 ✓ Servo movement
 ✓ NeoPixel lighting
@@ -1014,7 +1013,7 @@ Resuming from line 6...
 ✓ Generated: husband_audio/dialogue_06.mp3
 ✓ Generated: husband_audio/dialogue_07.mp3
 ✓ Generated: husband_audio/dialogue_08.mp3
-...
+
 Completed! 15/15 files generated.
 Replaced files on SD card. Updated the playDialogue() switch cases to match new emotional beats and timing. Re-tested each sequence.
 The new script is better - clearer emotional arc, stronger character development.
@@ -1042,7 +1041,7 @@ All systems stable
 No glitches or dropouts
 
 The robot's emotional expression is powerful. Dialogue 1 ("I never wanted it to come to this") with slumped shoulders and sad blue lighting genuinely moves people.
-Created quick reference card for radio commands (states 1-15). Backed up all code to GitHub. Labeled every connection one final time.
+Created quick reference card for radio commands (states 1-23). Backed up all code to GitHub. Labeled every connection one final time.
 System Status: PERFORMANCE READY ✓
 ADD PHOTO: Final system testing, emotional moment captures, radio command reference card, GitHub commit screenshot
 12/09/2025 - Performance Day:
@@ -1057,9 +1056,10 @@ My partner deserves huge credit for the base movement, physical construction, an
 Professor Shiloh's guidance was invaluable. From diagnosing the transmitter issues to suggesting comprehensive testing to providing spare parts when needed - this wouldn't have happened without him.
 Final Technical Stats:
 
-15 synchronized dialogue sequences
+23 synchronized dialogue sequences
 6 servos + jaw coordinated
 3 NeoPixel zones (eyes, crown = 32 LEDs total)
+23 Dialogues
 0 radio dropouts
 0 system failures
 100% audience engagement
