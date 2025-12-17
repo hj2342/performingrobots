@@ -23,9 +23,8 @@ I researched servo torque requirements for lifting wooden arms and calculated ap
 
 The video of progress shows how much more "alive" the robot appears with proper arm proportions. I'm beginning to understand that robot performance isn't just about technical function - it's about creating believable character presence.
 
-![IMG_0062](https://github.com/user-attachments/assets/f2525f6e-866a-44b1-ae06-0c0e2922bd07)
-![IMG_0058](https://github.com/user-attachments/assets/baa65f53-3f83-460b-9027-806c4bbea2d0)
-![IMG_0060](https://github.com/user-attachments/assets/49b70c36-675a-4567-b33c-15bbf7b6ebfd)
+photo here
+
 ## 10/08/2025 - Servo Integration Challenges:
 This evening presented fascinating problem-solving opportunities. While my teammate wrestled with the face servo mounting, I worked on organizing our wiring strategy. The copper wire mesh solution my partner developed was brilliant - it taught me that sometimes unconventional approaches work better than standard adhesives.
 
@@ -364,9 +363,9 @@ Significantly improved robot's human-like silhouette
 
 The shoulders now look substantial, especially with the vest. The gloved hands add a finished, professional appearance.
 
-![IMG_5189](https://github.com/user-attachments/assets/80ad3646-7c0c-491a-a64a-72e32681bdbd)
-![IMG_5176](https://github.com/user-attachments/assets/806a9a01-d586-4ef8-af05-761a2bb8aeaa)
-![IMG_5180](https://github.com/user-attachments/assets/d99367ae-798c-42ed-b547-ebfc6ef1efc0)
+<img width="1088" height="754" alt="image" src="https://github.com/user-attachments/assets/0f2130cd-3fc0-4ddb-8dee-bd6a952ae295" />
+<img width="544" height="504" alt="Screenshot 2025-12-17 at 6 04 36 AM" src="https://github.com/user-attachments/assets/68d6eb30-7106-45cc-ac2f-c4b1a849e3ae" />
+<img width="544" height="504" alt="Screenshot 2025-12-17 at 6 04 51 AM" src="https://github.com/user-attachments/assets/1161108e-5291-49e9-bbf4-453a1581e513" />
 
 11/28/2025 - Wire Management Marathon:
 Tackled the chaotic wiring today. Mapped every connection:
@@ -388,8 +387,8 @@ NeoPixel Power Bundle: All 5V and GND lines for LEDs
 NeoPixel Data Bundle: Separate data lines (pins 2, 5, 8)
 Radio Bundle: nRF24 SPI and control lines
 
-Used cable clips along the spine. Labeled everything with masking tape markers. Much cleaner and accessible now.
-![IMG_5023](https://github.com/user-attachments/assets/95bdfa51-7cc7-4c6d-990d-c82a1e0b9f4a)
+Used cable clips along the spine. Labeled everything with masking tape markers and used zip ties. Much cleaner and accessible now.
+<img width="1088" height="1008" alt="image" src="https://github.com/user-attachments/assets/6f4bfbef-9e0c-470b-9a78-44e098f6fb6b" />
 
 11/29/2025 - Chest and Belt NeoPixel Integration:
 Wanted full-body emotional lighting beyond just the crown. Added NeoPixel strips to chest and belt - but realized I needed to plan this into the code architecture first.
@@ -407,7 +406,7 @@ Belt: 6 pixels (will add to pin 9)
 
 Cut the strips and tested them independently. The synchronized three-zone lighting (crown + chest + belt) creates incredible emotional impact. When all zones pulse red for anger or sparkle yellow for happiness, the full-body effect is stunning.
 Decided to implement these in code tomorrow rather than just hardware testing today. Need to update the mood functions to control all zones.
-![IMG_5202](https://github.com/user-attachments/assets/b6a5a7ba-d3d8-475a-b166-cdd430ec430b)
+<img width="544" height="667" alt="Screenshot 2025-12-17 at 6 08 56 AM" src="https://github.com/user-attachments/assets/43fc2bf2-6c7e-4531-8354-8dad21392a20" />
 
 11/30/2025 - Red Shield Soldering and NeoPixel Expansion Code:
 Morning: Fixed the shield connections that were causing NeoPixel flickering. Reflowed all critical joints - 5V bus, ground plane, data lines. Shield now rock solid.
@@ -491,7 +490,7 @@ void setMood(uint8_t er, uint8_t eg, uint8_t eb, uint8_t cr, uint8_t cg, uint8_t
   setCrownColor(cr, cg, cb);
 }
 These functions give us full control over emotional expression through lighting. The setMood() function lets us set eyes and crown independently for subtle emotional nuance.
-![IMG_4757](https://github.com/user-attachments/assets/4a8a9b48-4938-4468-9375-2b4783a3412c)
+<img width="1088" height="1334" alt="image" src="https://github.com/user-attachments/assets/4c59bc63-e8e8-47b4-b076-c108f1ea2ab4" />
 
 12/01/2025 - Script Contribution and Servo Function Library:
 Script meeting - noticed severe line imbalance. Wrote additional husband-kid dialogue and judge questioning sequences. Each character now has 8-10 lines - much better.
@@ -571,6 +570,10 @@ void gestureEmphatic() {
   initial();
 }
 These movement primitives can be combined with mood lighting for powerful emotional expression.
+<img width="1088" height="1334" alt="image" src="https://github.com/user-attachments/assets/280a8471-24c9-49a6-a4fd-cc36aa9d5818" />
+
+<img width="1088" height="1334" alt="image" src="https://github.com/user-attachments/assets/0d01be95-09a0-46c9-91af-50fb0e934ae0" />
+
 <img width="716" height="754" alt="image" src="https://github.com/user-attachments/assets/88e62560-fe28-4f3e-b939-6fb3fbbdc26f" />
 12/02/2025 - Music Board Protection and Radio Setup:
 After my partner documented the falls in his journal, I reinforced the music board mounting. Created cardboard protective enclosure with foam padding. The board is now much more impact-resistant.
@@ -636,8 +639,8 @@ Professor Shiloh suggested the transmitter Arduino itself might be failing. Retr
 
 But Professor emphasized stress testing before trusting it. Tomorrow: comprehensive QA.
 
-![IMG_4871](https://github.com/user-attachments/assets/fe6b7acb-6b72-44c8-9c51-84795436b79b)
-![IMG_5184](https://github.com/user-attachments/assets/17e98064-fd3a-4246-91c6-95e7f6578c2e)
+<img width="1088" height="1334" alt="image" src="https://github.com/user-attachments/assets/11c7382d-6473-4634-a9c8-d03a703087f8" />
+<img width="1088" height="1334" alt="image" src="https://github.com/user-attachments/assets/7b30dbe6-f2aa-4e8a-bc42-4bf1f478cf0d" />
 
 ## 12/04/2025 - Transmitter Quality Assurance (22+ Test Cases):
 Following Professor Shiloh's advice, designed and executed comprehensive test protocol:
