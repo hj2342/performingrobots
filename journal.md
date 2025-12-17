@@ -9,13 +9,16 @@ The troubleshooting process was enlightening watching the methodical elimination
 
 My main contribution involved measuring and preparing the Alpine wood plank for the spine structure. I learned proper techniques for ensuring structural stability particularly how weight distribution affects a tall, vertical robot. The drilling process required precision to avoid splitting the wood, especially near edges.
 
+
 ## 10/03/2025 - Character Design and Artistic Integration:
 Today shifted from pure mechanics to the artistic side of robotics something I found surprisingly challenging. While my teammate worked on the shoulder assembly, I focused on understanding how our character's proportions would translate to functional movement.
 
 The Walter White face cutout process was meticulous. I assisted by holding materials steady and helping with measurements. What struck me most was the balance between aesthetic accuracy and functional practicality we needed the face light enough not to strain the servo, yet rigid enough to maintain its shape during movement.
 
 I spent considerable time thinking about how to attach the shredded body costume in a way that wouldn't interfere with servo operation or obscure any components we'd need to access later. This forward-thinking approach proved valuable in later sessions.
-
+![IMG_0062](https://github.com/user-attachments/assets/f2525f6e-866a-44b1-ae06-0c0e2922bd07)
+![IMG_0058](https://github.com/user-attachments/assets/baa65f53-3f83-460b-9027-806c4bbea2d0)
+![IMG_0060](https://github.com/user-attachments/assets/49b70c36-675a-4567-b33c-15bbf7b6ebfd)
 ## 10/07/2025 - Arm Mechanics and Movement Planning:
 Today I took a more active role in conceptualizing the arm movement system. While my partner cut the planks, I sketched out different servo placement options and their respective range-of-motion possibilities. The decision to incorporate two-dimensional movement excited me - it would make our robot far more expressive.
 
