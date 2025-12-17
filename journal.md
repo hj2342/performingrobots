@@ -650,7 +650,7 @@ The structure is ready for receiving state commands (1-15) for each dialogue seq
 **ADD PHOTO:** Music board enclosure, foam padding, radio connection diagram
 
 ## 12/03/2025 - Transmitter Glitch Discovery:
-Radio communication failing intermittently - 2-3 second dropouts randomly. Unacceptable for live performance.
+Radio communication failing intermittently - 2-3 second dropouts randomly and started showing gibberish. Unacceptable for live performance.
 
 Systematic diagnostics:
 - Swapped nRF modules → problem stayed with transmitter
