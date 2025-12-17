@@ -186,41 +186,40 @@ Started by writing a unified emotion control function that takes an emotion para
 The reality was frustrating. The NeoPixel library uses timing-sensitive protocols that don't play well with other code. When I tried to update both eyes and crown, the NeoPixels would glitch - random colors, flickering, or complete freezeouts.
 Spent hours debugging. Discovered the issue was blocking delays in my LED blink code interfering with the NeoPixel update timing. The library needs precise timing to communicate with the strip, and any interruption causes data corruption.
 Research led me to non-blocking timing approaches using millis(). Started refactoring all the timing code to track elapsed time rather than using delay() commands. Not finished yet but I can see this is the right path.
-    void updateLights() {
-    setEyesColor(255, 0, 0);
-    delay(500);  // This blocks everything!
-    crown.show();
-    delay(500);  // NeoPixels miss their timing!
-  }
-  
-  // The NeoPixel library needs precise timing and delay() 
-  // interrupts cause data corruption and glitching
 
+       void updateLights() {
+          setEyesColor(255, 0, 0);
+          delay(500);  // This blocks everything!
+          crown.show();
+          delay(500);  // NeoPixels miss their timing!
+        }
+        
 ##11/18/2025 - Servo Replacement and Non-Blocking Code Refactor:
  I  replaced the servo horn crown with a higher quality  one that came with the new servo. The star plastic horn we'd been using showed stress cracks - another sign we'd been overloading the old servo.T he new 35kg servo! Immediately began installation. Had to slightly enlarge the mounting holes since the new servo had a different horn size, but the process was straightforward.
 After installation and recalibration, the improvement was dramatic. The arm moved smoothly with no strain, held position solidly even when pushed, and responded quickly to commands. Tested the full range of motion multiple times - absolutely solid performance.
 Running movement sequences that had caused the old servo to struggle, the new one handled them effortlessly. The difference between marginal and adequate torque rating is night and day.
-        unsigned long previousMillis = 0;
-      int animationState = 0;
-      
-      void updateLightsNonBlocking() {
-        unsigned long currentMillis = millis();
-        
-        if (currentMillis - previousMillis >= 500) {
-          previousMillis = currentMillis;
-          
-          if (animationState == 0) {
-            setEyesColor(255, 0, 0);
-            animationState = 1;
-          } else {
-            setEyesColor(0, 0, 0);
-            animationState = 0;
-          }
-        }
-        
-        // Crown updates happen independently without blocking
-        crown.show();
-}
+
+            
+            unsigned long previousMillis = 0;
+            int animationState = 0;
+            void updateLightsNonBlocking() {
+              unsigned long currentMillis = millis();
+              
+              if (currentMillis - previousMillis >= 500) {
+                previousMillis = currentMillis;
+                
+                if (animationState == 0) {
+                  setEyesColor(255, 0, 0);
+                  animationState = 1;
+                } else {
+                  setEyesColor(0, 0, 0);
+                  animationState = 0;
+                }
+              }
+              
+              // Crown updates happen independently without blocking
+              crown.show();
+      }
 
 
 ##11/19/2025 - The Great Robot Catastrophe:
@@ -437,216 +436,214 @@ Decided to implement these in code tomorrow rather than just hardware testing to
 11/30/2025 - Red Shield Soldering and NeoPixel Expansion Code:
 Morning: Fixed the shield connections that were causing NeoPixel flickering. Reflowed all critical joints - 5V bus, ground plane, data lines. Shield now rock solid.
 Afternoon: Expanded the NeoPixel code to handle the full lighting system:
-ADD CODE:
-cpp// -------------------- NEOPIXELS --------------------
-#include <Adafruit_NeoPixel.h>
 
-#define EYE1_PIN   2
-#define EYE2_PIN   5
-#define CROWN_PIN  8
-
-#define NUM_EYES 2
-#define NUM_CROWN 28
-
-Adafruit_NeoPixel eye1(NUM_EYES, EYE1_PIN, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel eye2(NUM_EYES, EYE2_PIN, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel crown(NUM_CROWN, CROWN_PIN, NEO_GRB + NEO_KHZ800);
-
-int baseBrightness = 80;
-
-// =====================================================================
-//                      NEOPIXEL FUNCTIONS
-// =====================================================================
-
-void setEyesColor(uint8_t r, uint8_t g, uint8_t b) {
-  for (int i = 0; i < NUM_EYES; i++) {
-    eye1.setPixelColor(i, eye1.Color(r, g, b));
-    eye2.setPixelColor(i, eye2.Color(r, g, b));
-  }
-  eye1.show();
-  eye2.show();
-}
-
-void setCrownColor(uint8_t r, uint8_t g, uint8_t b) {
-  for (int i = 0; i < NUM_CROWN; i++) {
-    crown.setPixelColor(i, crown.Color(r, g, b));
-  }
-  crown.show();
-}
-
-void pulseEyes(uint8_t r, uint8_t g, uint8_t b, int duration = 1000) {
-  int steps = 30;
-  int delayTime = duration / (steps * 2);
-  
-  // Fade in
-  for (int i = 0; i <= steps; i++) {
-    int br = map(i, 0, steps, 0, baseBrightness);
-    eye1.setBrightness(br);
-    eye2.setBrightness(br);
-    setEyesColor(r, g, b);
-    delay(delayTime);
-  }
-  
-  // Fade out
-  for (int i = steps; i >= 0; i--) {
-    int br = map(i, 0, steps, 0, baseBrightness);
-    eye1.setBrightness(br);
-    eye2.setBrightness(br);
-    setEyesColor(r, g, b);
-    delay(delayTime);
-  }
-}
-
-void flickerEyes(uint8_t r, uint8_t g, uint8_t b, int duration = 1000) {
-  unsigned long startTime = millis();
-  while (millis() - startTime < duration) {
-    int br = random(20, baseBrightness);
-    eye1.setBrightness(br);
-    eye2.setBrightness(br);
-    setEyesColor(r, g, b);
-    delay(random(20, 80));
-  }
-}
-
-void setMood(uint8_t er, uint8_t eg, uint8_t eb, uint8_t cr, uint8_t cg, uint8_t cb) {
-  eye1.setBrightness(baseBrightness);
-  eye2.setBrightness(baseBrightness);
-  crown.setBrightness(baseBrightness);
-  setEyesColor(er, eg, eb);
-  setCrownColor(cr, cg, cb);
-}
+      // -------------------- NEOPIXELS --------------------
+      #include <Adafruit_NeoPixel.h>
+      
+      #define EYE1_PIN   2
+      #define EYE2_PIN   5
+      #define CROWN_PIN  8
+      
+      #define NUM_EYES 2
+      #define NUM_CROWN 28
+      
+      Adafruit_NeoPixel eye1(NUM_EYES, EYE1_PIN, NEO_GRB + NEO_KHZ800);
+      Adafruit_NeoPixel eye2(NUM_EYES, EYE2_PIN, NEO_GRB + NEO_KHZ800);
+      Adafruit_NeoPixel crown(NUM_CROWN, CROWN_PIN, NEO_GRB + NEO_KHZ800);
+      
+      int baseBrightness = 80;
+      
+      // =====================================================================
+      //                      NEOPIXEL FUNCTIONS
+      // =====================================================================
+      
+      void setEyesColor(uint8_t r, uint8_t g, uint8_t b) {
+        for (int i = 0; i < NUM_EYES; i++) {
+          eye1.setPixelColor(i, eye1.Color(r, g, b));
+          eye2.setPixelColor(i, eye2.Color(r, g, b));
+        }
+        eye1.show();
+        eye2.show();
+      }
+      
+      void setCrownColor(uint8_t r, uint8_t g, uint8_t b) {
+        for (int i = 0; i < NUM_CROWN; i++) {
+          crown.setPixelColor(i, crown.Color(r, g, b));
+        }
+        crown.show();
+      }
+      
+      void pulseEyes(uint8_t r, uint8_t g, uint8_t b, int duration = 1000) {
+        int steps = 30;
+        int delayTime = duration / (steps * 2);
+        
+        // Fade in
+        for (int i = 0; i <= steps; i++) {
+          int br = map(i, 0, steps, 0, baseBrightness);
+          eye1.setBrightness(br);
+          eye2.setBrightness(br);
+          setEyesColor(r, g, b);
+          delay(delayTime);
+        }
+        
+        // Fade out
+        for (int i = steps; i >= 0; i--) {
+          int br = map(i, 0, steps, 0, baseBrightness);
+          eye1.setBrightness(br);
+          eye2.setBrightness(br);
+          setEyesColor(r, g, b);
+          delay(delayTime);
+        }
+      }
+      
+      void flickerEyes(uint8_t r, uint8_t g, uint8_t b, int duration = 1000) {
+        unsigned long startTime = millis();
+        while (millis() - startTime < duration) {
+          int br = random(20, baseBrightness);
+          eye1.setBrightness(br);
+          eye2.setBrightness(br);
+          setEyesColor(r, g, b);
+          delay(random(20, 80));
+        }
+      }
+      
+      void setMood(uint8_t er, uint8_t eg, uint8_t eb, uint8_t cr, uint8_t cg, uint8_t cb) {
+        eye1.setBrightness(baseBrightness);
+        eye2.setBrightness(baseBrightness);
+        crown.setBrightness(baseBrightness);
+        setEyesColor(er, eg, eb);
+        setCrownColor(cr, cg, cb);
+      }
 These functions give us full control over emotional expression through lighting. The setMood() function lets us set eyes and crown independently for subtle emotional nuance.
 <img width="1088" height="1334" alt="image" src="https://github.com/user-attachments/assets/4c59bc63-e8e8-47b4-b076-c108f1ea2ab4" />
 
 12/01/2025 - Script Contribution and Servo Function Library:
 Script meeting - noticed severe line imbalance. Wrote additional husband-kid dialogue and judge questioning sequences. Each character now has 8-10 lines - much better.
 While thinking about the new lines, started organizing the servo movement library. My partner had basic movements coded, but I needed more expressive gestures:
-ADD CODE:
-cpp// =====================================================================
-//                      BASIC SERVO FUNCTIONS
-// =====================================================================
+      // =====================================================================
+      //                      BASIC SERVO FUNCTIONS
+      // =====================================================================
 
-void initial() {
-  // Setting up the robot in initial position
-  r_shoulder.write(180);
-  r_shoulder.attach(20); 
-  r_arm.write(30);
-  r_arm.attach(21); 
-  r_4arm.write(80);
-  r_4arm.attach(19);
-  l_shoulder.write(50);
-  l_shoulder.attach(17); 
-  l_arm.write(0);
-  l_arm.attach(18); 
-  l_4arm.write(90);
-  l_4arm.attach(16);
-}
-
-void talking(int time) {
-  // Talking gesture - right forearm movement
-  for (int i = 0; i <= time; i++) {
-    delay(500);
-    r_4arm.write(120);
-    r_4arm.attach(19);
-    delay(500);
-    r_4arm.write(80);
-    r_4arm.attach(19);
-  }
-}
-
-void attention(int time) {
-  // Attention gesture - shoulders raised
-  r_shoulder.write(180);
-  r_shoulder.attach(20); 
-  r_arm.write(30);
-  r_arm.attach(21); 
-  r_4arm.write(0);
-  r_4arm.attach(19);
-  l_shoulder.write(50);
-  l_shoulder.attach(17); 
-  l_arm.write(0);
-  l_arm.attach(18); 
-  l_4arm.write(90);
-  l_4arm.attach(16);
-  
-  for (int i = 0; i <= time; i++) {
-    r_shoulder.write(80);
-    r_shoulder.attach(20); 
-    l_shoulder.write(100);
-    l_shoulder.attach(17); 
-  }
-}
-
-void shoulderSlump() {
-  // Defeated/sad posture
-  r_shoulder.write(150);
-  r_shoulder.attach(20);
-  l_shoulder.write(30);
-  l_shoulder.attach(17);
-  delay(1000);
-}
-
-void gestureEmphatic() {
-  // Emphatic gesture - both arms out
-  r_shoulder.write(90);
-  r_arm.write(90);
-  l_shoulder.write(90);
-  l_arm.write(90);
-  delay(800);
-  initial();
-}
+      void initial() {
+        // Setting up the robot in initial position
+        r_shoulder.write(180);
+        r_shoulder.attach(20); 
+        r_arm.write(30);
+        r_arm.attach(21); 
+        r_4arm.write(80);
+        r_4arm.attach(19);
+        l_shoulder.write(50);
+        l_shoulder.attach(17); 
+        l_arm.write(0);
+        l_arm.attach(18); 
+        l_4arm.write(90);
+        l_4arm.attach(16);
+      }
+      
+      void talking(int time) {
+        // Talking gesture - right forearm movement
+        for (int i = 0; i <= time; i++) {
+          delay(500);
+          r_4arm.write(120);
+          r_4arm.attach(19);
+          delay(500);
+          r_4arm.write(80);
+          r_4arm.attach(19);
+        }
+      }
+      
+      void attention(int time) {
+        // Attention gesture - shoulders raised
+        r_shoulder.write(180);
+        r_shoulder.attach(20); 
+        r_arm.write(30);
+        r_arm.attach(21); 
+        r_4arm.write(0);
+        r_4arm.attach(19);
+        l_shoulder.write(50);
+        l_shoulder.attach(17); 
+        l_arm.write(0);
+        l_arm.attach(18); 
+        l_4arm.write(90);
+        l_4arm.attach(16);
+        
+        for (int i = 0; i <= time; i++) {
+          r_shoulder.write(80);
+          r_shoulder.attach(20); 
+          l_shoulder.write(100);
+          l_shoulder.attach(17); 
+        }
+      }
+      
+      void shoulderSlump() {
+        // Defeated/sad posture
+        r_shoulder.write(150);
+        r_shoulder.attach(20);
+        l_shoulder.write(30);
+        l_shoulder.attach(17);
+        delay(1000);
+      }
+      
+      void gestureEmphatic() {
+        // Emphatic gesture - both arms out
+        r_shoulder.write(90);
+        r_arm.write(90);
+        l_shoulder.write(90);
+        l_arm.write(90);
+        delay(800);
+        initial();
+      }
 These movement primitives can be combined with mood lighting for powerful emotional expression.
 <img width="1088" height="1334" alt="image" src="https://github.com/user-attachments/assets/280a8471-24c9-49a6-a4fd-cc36aa9d5818" />
 
 <img width="1088" height="1334" alt="image" src="https://github.com/user-attachments/assets/0d01be95-09a0-46c9-91af-50fb0e934ae0" />
 
-<img width="716" height="754" alt="image" src="https://github.com/user-attachments/assets/88e62560-fe28-4f3e-b939-6fb3fbbdc26f" />
 12/02/2025 - Music Board Protection and Radio Setup:
 After my partner documented the falls in his journal, I reinforced the music board mounting. Created cardboard protective enclosure with foam padding. The board is now much more impact-resistant.
 Also began setting up the radio communication structure in the receiver code:
-ADD CODE:
-cppconst int NRF_CE_PIN = A11, NRF_CSN_PIN = A15;
 
-// nRF 24L01 pin connections:
-//          1      GND
-//          2      3.3V
-//          3      CE  → A11
-//          4      CSN → A15
-//          5      SCLK
-//          6      MOSI
-//          7      MISO
+      
+      // nRF 24L01 pin connections:
+      //          1      GND
+      //          2      3.3V
+      //          3      CE  → A11
+      //          4      CSN → A15
+      //          5      SCLK
+      //          6      MOSI
+      //          7      MISO
+      //const int NRF_CE_PIN = A11, NRF_CSN_PIN = A15;
 
-#include <SPI.h>
-#include <nRF24L01.h>
-#include <RF24.h>
+      #include <SPI.h>
+      #include <nRF24L01.h>
+      #include <RF24.h>
+      
+      RF24 radio(NRF_CE_PIN, NRF_CSN_PIN);
+      
+      const byte CUSTOM_ADDRESS_BYTE = 0x33;
+      const int CUSTOM_CHANNEL_NUMBER = 90;
+      
+      const byte xmtrAddress[] = { CUSTOM_ADDRESS_BYTE, CUSTOM_ADDRESS_BYTE, 0xC7, 0xE6, 0xCC };
+      const byte rcvrAddress[] = { CUSTOM_ADDRESS_BYTE, CUSTOM_ADDRESS_BYTE, 0xC7, 0xE6, 0x66 };
+      
+      const int RF24_POWER_LEVEL = RF24_PA_LOW;
+      
+      struct DataStruct {
+        uint8_t stateNumber;
+      };
+      DataStruct data;
+      
+      void setupRF24() {
+        if (!radio.begin()) {
+          Serial.println(F("Radio initialization failed"));
+          while (1);
+        }
+        
+        Serial.println(F("Radio successfully initialized"));
+        radio.setDataRate(RF24_250KBPS);
+        radio.setChannel(CUSTOM_CHANNEL_NUMBER);
+        radio.setPALevel(RF24_POWER_LEVEL);
+      }
 
-RF24 radio(NRF_CE_PIN, NRF_CSN_PIN);
-
-const byte CUSTOM_ADDRESS_BYTE = 0x33;
-const int CUSTOM_CHANNEL_NUMBER = 90;
-
-const byte xmtrAddress[] = { CUSTOM_ADDRESS_BYTE, CUSTOM_ADDRESS_BYTE, 0xC7, 0xE6, 0xCC };
-const byte rcvrAddress[] = { CUSTOM_ADDRESS_BYTE, CUSTOM_ADDRESS_BYTE, 0xC7, 0xE6, 0x66 };
-
-const int RF24_POWER_LEVEL = RF24_PA_LOW;
-
-struct DataStruct {
-  uint8_t stateNumber;
-};
-DataStruct data;
-
-void setupRF24() {
-  if (!radio.begin()) {
-    Serial.println(F("Radio initialization failed"));
-    while (1);
-  }
-  
-  Serial.println(F("Radio successfully initialized"));
-  radio.setDataRate(RF24_250KBPS);
-  radio.setChannel(CUSTOM_CHANNEL_NUMBER);
-  radio.setPALevel(RF24_POWER_LEVEL);
-}
-```
 
 The structure is ready for receiving state commands (1-15) for each dialogue sequence.
 
@@ -671,8 +668,8 @@ But Professor emphasized stress testing before trusting it. Tomorrow: comprehens
 ## 12/04/2025 - Transmitter Quality Assurance (22+ Test Cases):
 Following Professor Shiloh's advice, designed and executed comprehensive test protocol:
 
-**Test Protocol Document:**
-```
+
+
 TRANSMITTER RELIABILITY TEST SUITE
 ===================================
 
@@ -713,274 +710,272 @@ Documented everything in spreadsheet. Zero dropouts, zero failures. The new tran
 
 12/05/2025 - Master Integration Code Development:
 The big day - combining everything into one synchronized system. Started writing the master receiver code:
-ADD COMPLETE INTEGRATED CODE:
-cpp// =====================================================
-// PERFORMING ROBOTS - HUSBAND ROBOT RECEIVER CODE
-// Integrates: Radio, Servos, NeoPixels, Audio
-// By:Hari
-// =====================================================
-
-const int NRF_CE_PIN = A11, NRF_CSN_PIN = A15;
-
-#include <SPI.h>
-#include <nRF24L01.h>
-#include <RF24.h>
-#include <Servo.h>
-#include <Adafruit_NeoPixel.h>
-#include <Adafruit_VS1053.h>
-#include <SD.h>
-
-// -------------------- SERVOS --------------------
-Servo r_shoulder;
-Servo r_arm;
-Servo r_4arm;
-Servo l_shoulder;
-Servo l_arm;
-Servo l_4arm;
-Servo jaw;
-
-// -------------------- NEOPIXELS --------------------
-#define EYE1_PIN   2
-#define EYE2_PIN   5
-#define CROWN_PIN  8
-#define NUM_EYES 2
-#define NUM_CROWN 28
-
-Adafruit_NeoPixel eye1(NUM_EYES, EYE1_PIN, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel eye2(NUM_EYES, EYE2_PIN, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel crown(NUM_CROWN, CROWN_PIN, NEO_GRB + NEO_KHZ800);
-
-int baseBrightness = 80;
-
-// -------------------- RADIO --------------------
-RF24 radio(NRF_CE_PIN, NRF_CSN_PIN);
-const byte CUSTOM_ADDRESS_BYTE = 0x33;
-const int CUSTOM_CHANNEL_NUMBER = 90;
-const byte rcvrAddress[] = { CUSTOM_ADDRESS_BYTE, CUSTOM_ADDRESS_BYTE, 0xC7, 0xE6, 0x66 };
-
-struct DataStruct {
-  uint8_t stateNumber;
-};
-DataStruct data;
-
-// -------------------- MUSIC PLAYER --------------------
-#define VS1053_CS     6
-#define VS1053_DCS    7
-#define VS1053_DREQ   3
-#define CARDCS        4
-
-Adafruit_VS1053_FilePlayer musicPlayer = Adafruit_VS1053_FilePlayer(
-  VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
-
-// =====================================================================
-//                      NEOPIXEL FUNCTIONS
-// =====================================================================
-
-void setEyesColor(uint8_t r, uint8_t g, uint8_t b) {
-  for (int i = 0; i < NUM_EYES; i++) {
-    eye1.setPixelColor(i, eye1.Color(r, g, b));
-    eye2.setPixelColor(i, eye2.Color(r, g, b));
-  }
-  eye1.show();
-  eye2.show();
-}
-
-void setCrownColor(uint8_t r, uint8_t g, uint8_t b) {
-  for (int i = 0; i < NUM_CROWN; i++) {
-    crown.setPixelColor(i, crown.Color(r, g, b));
-  }
-  crown.show();
-}
-
-void setMood(uint8_t er, uint8_t eg, uint8_t eb, uint8_t cr, uint8_t cg, uint8_t cb) {
-  eye1.setBrightness(baseBrightness);
-  eye2.setBrightness(baseBrightness);
-  crown.setBrightness(baseBrightness);
-  setEyesColor(er, eg, eb);
-  setCrownColor(cr, cg, cb);
-}
-
-void pulseEyes(uint8_t r, uint8_t g, uint8_t b, int duration = 1000) {
-  int steps = 30;
-  int delayTime = duration / (steps * 2);
-  
-  for (int i = 0; i <= steps; i++) {
-    int br = map(i, 0, steps, 0, baseBrightness);
-    eye1.setBrightness(br);
-    eye2.setBrightness(br);
-    setEyesColor(r, g, b);
-    delay(delayTime);
-  }
-  
-  for (int i = steps; i >= 0; i--) {
-    int br = map(i, 0, steps, 0, baseBrightness);
-    eye1.setBrightness(br);
-    eye2.setBrightness(br);
-    setEyesColor(r, g, b);
-    delay(delayTime);
-  }
-}
-
-// =====================================================================
-//                      SERVO FUNCTIONS
-// =====================================================================
-
-void initial() {
-  r_shoulder.write(180);
-  r_shoulder.attach(20); 
-  r_arm.write(30);
-  r_arm.attach(21); 
-  r_4arm.write(80);
-  r_4arm.attach(19);
-  l_shoulder.write(50);
-  l_shoulder.attach(17); 
-  l_arm.write(0);
-  l_arm.attach(18); 
-  l_4arm.write(90);
-  l_4arm.attach(16);
-}
-
-void talking(int reps) {
-  for (int i = 0; i <= reps; i++) {
-    delay(500);
-    r_4arm.write(120);
-    delay(500);
-    r_4arm.write(80);
-  }
-}
-
-void shoulderSlump() {
-  r_shoulder.write(150);
-  l_shoulder.write(30);
-  delay(1000);
-}
-
-void attention(int time) {
-  for (int i = 0; i <= time; i++) {
-    r_shoulder.write(80);
-    l_shoulder.write(100);
-    delay(500);
-  }
-}
-
-// =====================================================================
-//                      DIALOGUE SEQUENCES
-// =====================================================================
-
-void playDialogue(int sequenceNum) {
-  char filename[30];
-  sprintf(filename, "husband_audio/dialogue_%02d.mp3", sequenceNum);
-  
-  switch(sequenceNum) {
-    case 1:
-      // "I never wanted it to come to this"
-      setMood(150, 150, 255, 100, 100, 255); // Sad blue
-      shoulderSlump();
-      musicPlayer.startPlayingFile(filename);
-      break;
+      // =====================================================
+      // PERFORMING ROBOTS - HUSBAND ROBOT RECEIVER CODE
+      // Integrates: Radio, Servos, NeoPixels, Audio
+      // By:Hari
+      // =====================================================
       
-    case 2:
-      // "Our family meant everything to me!"
-      setMood(255, 100, 0, 255, 50, 0); // Angry red-orange
-      attention(2);
-      musicPlayer.startPlayingFile(filename);
-      break;
+      const int NRF_CE_PIN = A11, NRF_CSN_PIN = A15;
       
-    case 3:
-      // "Maybe if you had listened..."
-      setMood(100, 200, 50, 100, 200, 50); // Jealous green
-      talking(3);
-      musicPlayer.startPlayingFile(filename);
-      break;
+      #include <SPI.h>
+      #include <nRF24L01.h>
+      #include <RF24.h>
+      #include <Servo.h>
+      #include <Adafruit_NeoPixel.h>
+      #include <Adafruit_VS1053.h>
+      #include <SD.h>
       
-    case 4:
-      // Neutral statement
-      setMood(255, 255, 255, 200, 200, 200); // Neutral white
-      initial();
-      musicPlayer.startPlayingFile(filename);
-      break;
+      // -------------------- SERVOS --------------------
+      Servo r_shoulder;
+      Servo r_arm;
+      Servo r_4arm;
+      Servo l_shoulder;
+      Servo l_arm;
+      Servo l_4arm;
+      Servo jaw;
       
-    case 5:
-      // Happy memory
-      setMood(255, 200, 0, 255, 150, 0); // Happy yellow
-      talking(2);
-      musicPlayer.startPlayingFile(filename);
-      break;
+      // -------------------- NEOPIXELS --------------------
+      #define EYE1_PIN   2
+      #define EYE2_PIN   5
+      #define CROWN_PIN  8
+      #define NUM_EYES 2
+      #define NUM_CROWN 28
       
-    // Add cases 6-15 for remaining dialogues
-    
-    default:
-      initial();
-      setMood(255, 255, 255, 200, 200, 200);
-      break;
-  }
-}
-
-// =====================================================================
-//                      SETUP
-// =====================================================================
-
-void setup() {
-  Serial.begin(9600);
-  
-  // Initialize NeoPixels
-  eye1.begin();
-  eye2.begin();
-  crown.begin();
-  setMood(255, 255, 255, 200, 200, 200);
-  
-  // Initialize servos
-  initial();
-  
-  // Initialize radio
-  if (!radio.begin()) {
-    Serial.println(F("Radio failed"));
-    while(1);
-  }
-  radio.setDataRate(RF24_250KBPS);
-  radio.setChannel(CUSTOM_CHANNEL_NUMBER);
-  radio.setPALevel(RF24_PA_LOW);
-  radio.openReadingPipe(1, rcvrAddress);
-  radio.startListening();
-  
-  // Initialize music player
-  if (!musicPlayer.begin()) {
-    Serial.println(F("VS1053 not found"));
-    while (1);
-  }
-  
-  if (!SD.begin(CARDCS)) {
-    Serial.println(F("SD failed"));
-    while (1);
-  }
-  
-  musicPlayer.setVolume(10, 10);
-  musicPlayer.useInterrupt(VS1053_FILEPLAYER_PIN_INT);
-  
-  Serial.println(F("Husband Robot Ready!"));
-}
-
-// =====================================================================
-//                      MAIN LOOP
-// =====================================================================
-
-void loop() {
-  uint8_t pipeNum;
-  
-  if (radio.available(&pipeNum)) {
-    radio.read(&data, sizeof(data));
-    
-    Serial.print(F("Received state: "));
-    Serial.println(data.stateNumber);
-    
-    if (data.stateNumber >= 1 && data.stateNumber <= 15) {
-      playDialogue(data.stateNumber);
-    }
-  }
-  
-  delay(5);
-}
-```
+      Adafruit_NeoPixel eye1(NUM_EYES, EYE1_PIN, NEO_GRB + NEO_KHZ800);
+      Adafruit_NeoPixel eye2(NUM_EYES, EYE2_PIN, NEO_GRB + NEO_KHZ800);
+      Adafruit_NeoPixel crown(NUM_CROWN, CROWN_PIN, NEO_GRB + NEO_KHZ800);
+      
+      int baseBrightness = 80;
+      
+      // -------------------- RADIO --------------------
+      RF24 radio(NRF_CE_PIN, NRF_CSN_PIN);
+      const byte CUSTOM_ADDRESS_BYTE = 0x33;
+      const int CUSTOM_CHANNEL_NUMBER = 90;
+      const byte rcvrAddress[] = { CUSTOM_ADDRESS_BYTE, CUSTOM_ADDRESS_BYTE, 0xC7, 0xE6, 0x66 };
+      
+      struct DataStruct {
+        uint8_t stateNumber;
+      };
+      DataStruct data;
+      
+      // -------------------- MUSIC PLAYER --------------------
+      #define VS1053_CS     6
+      #define VS1053_DCS    7
+      #define VS1053_DREQ   3
+      #define CARDCS        4
+      
+      Adafruit_VS1053_FilePlayer musicPlayer = Adafruit_VS1053_FilePlayer(
+        VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
+      
+      // =====================================================================
+      //                      NEOPIXEL FUNCTIONS
+      // =====================================================================
+      
+      void setEyesColor(uint8_t r, uint8_t g, uint8_t b) {
+        for (int i = 0; i < NUM_EYES; i++) {
+          eye1.setPixelColor(i, eye1.Color(r, g, b));
+          eye2.setPixelColor(i, eye2.Color(r, g, b));
+        }
+        eye1.show();
+        eye2.show();
+      }
+      
+      void setCrownColor(uint8_t r, uint8_t g, uint8_t b) {
+        for (int i = 0; i < NUM_CROWN; i++) {
+          crown.setPixelColor(i, crown.Color(r, g, b));
+        }
+        crown.show();
+      }
+      
+      void setMood(uint8_t er, uint8_t eg, uint8_t eb, uint8_t cr, uint8_t cg, uint8_t cb) {
+        eye1.setBrightness(baseBrightness);
+        eye2.setBrightness(baseBrightness);
+        crown.setBrightness(baseBrightness);
+        setEyesColor(er, eg, eb);
+        setCrownColor(cr, cg, cb);
+      }
+      
+      void pulseEyes(uint8_t r, uint8_t g, uint8_t b, int duration = 1000) {
+        int steps = 30;
+        int delayTime = duration / (steps * 2);
+        
+        for (int i = 0; i <= steps; i++) {
+          int br = map(i, 0, steps, 0, baseBrightness);
+          eye1.setBrightness(br);
+          eye2.setBrightness(br);
+          setEyesColor(r, g, b);
+          delay(delayTime);
+        }
+        
+        for (int i = steps; i >= 0; i--) {
+          int br = map(i, 0, steps, 0, baseBrightness);
+          eye1.setBrightness(br);
+          eye2.setBrightness(br);
+          setEyesColor(r, g, b);
+          delay(delayTime);
+        }
+      }
+      
+      // =====================================================================
+      //                      SERVO FUNCTIONS
+      // =====================================================================
+      
+      void initial() {
+        r_shoulder.write(180);
+        r_shoulder.attach(20); 
+        r_arm.write(30);
+        r_arm.attach(21); 
+        r_4arm.write(80);
+        r_4arm.attach(19);
+        l_shoulder.write(50);
+        l_shoulder.attach(17); 
+        l_arm.write(0);
+        l_arm.attach(18); 
+        l_4arm.write(90);
+        l_4arm.attach(16);
+      }
+      
+      void talking(int reps) {
+        for (int i = 0; i <= reps; i++) {
+          delay(500);
+          r_4arm.write(120);
+          delay(500);
+          r_4arm.write(80);
+        }
+      }
+      
+      void shoulderSlump() {
+        r_shoulder.write(150);
+        l_shoulder.write(30);
+        delay(1000);
+      }
+      
+      void attention(int time) {
+        for (int i = 0; i <= time; i++) {
+          r_shoulder.write(80);
+          l_shoulder.write(100);
+          delay(500);
+        }
+      }
+      
+      // =====================================================================
+      //                      DIALOGUE SEQUENCES
+      // =====================================================================
+      
+      void playDialogue(int sequenceNum) {
+        char filename[30];
+        sprintf(filename, "husband_audio/dialogue_%02d.mp3", sequenceNum);
+        
+        switch(sequenceNum) {
+          case 1:
+            // "I never wanted it to come to this"
+            setMood(150, 150, 255, 100, 100, 255); // Sad blue
+            shoulderSlump();
+            musicPlayer.startPlayingFile(filename);
+            break;
+            
+          case 2:
+            // "Our family meant everything to me!"
+            setMood(255, 100, 0, 255, 50, 0); // Angry red-orange
+            attention(2);
+            musicPlayer.startPlayingFile(filename);
+            break;
+            
+          case 3:
+            // "Maybe if you had listened..."
+            setMood(100, 200, 50, 100, 200, 50); // Jealous green
+            talking(3);
+            musicPlayer.startPlayingFile(filename);
+            break;
+            
+          case 4:
+            // Neutral statement
+            setMood(255, 255, 255, 200, 200, 200); // Neutral white
+            initial();
+            musicPlayer.startPlayingFile(filename);
+            break;
+            
+          case 5:
+            // Happy memory
+            setMood(255, 200, 0, 255, 150, 0); // Happy yellow
+            talking(2);
+            musicPlayer.startPlayingFile(filename);
+            break;
+            
+          // Add cases 6-15 for remaining dialogues
+          
+          default:
+            initial();
+            setMood(255, 255, 255, 200, 200, 200);
+            break;
+        }
+      }
+      
+      // =====================================================================
+      //                      SETUP
+      // =====================================================================
+      
+      void setup() {
+        Serial.begin(9600);
+        
+        // Initialize NeoPixels
+        eye1.begin();
+        eye2.begin();
+        crown.begin();
+        setMood(255, 255, 255, 200, 200, 200);
+        
+        // Initialize servos
+        initial();
+        
+        // Initialize radio
+        if (!radio.begin()) {
+          Serial.println(F("Radio failed"));
+          while(1);
+        }
+        radio.setDataRate(RF24_250KBPS);
+        radio.setChannel(CUSTOM_CHANNEL_NUMBER);
+        radio.setPALevel(RF24_PA_LOW);
+        radio.openReadingPipe(1, rcvrAddress);
+        radio.startListening();
+        
+        // Initialize music player
+        if (!musicPlayer.begin()) {
+          Serial.println(F("VS1053 not found"));
+          while (1);
+        }
+        
+        if (!SD.begin(CARDCS)) {
+          Serial.println(F("SD failed"));
+          while (1);
+        }
+        
+        musicPlayer.setVolume(10, 10);
+        musicPlayer.useInterrupt(VS1053_FILEPLAYER_PIN_INT);
+        
+        Serial.println(F("Husband Robot Ready!"));
+      }
+      
+      // =====================================================================
+      //                      MAIN LOOP
+      // =====================================================================
+      
+      void loop() {
+        uint8_t pipeNum;
+        
+        if (radio.available(&pipeNum)) {
+          radio.read(&data, sizeof(data));
+          
+          Serial.print(F("Received state: "));
+          Serial.println(data.stateNumber);
+          
+          if (data.stateNumber >= 1 && data.stateNumber <= 15) {
+            playDialogue(data.stateNumber);
+          }
+        }
+        
+        delay(5);
+      }
 
 This is the complete integrated system! Each state (1-15) triggers a dialogue with synchronized servos and lighting.
 
