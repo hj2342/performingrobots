@@ -91,11 +91,11 @@ Today I focused on integrating the DFPlayer Mini music board. Spent time underst
 Initial power-up seemed fine, but when I tried to trigger audio playback while servos were moving, the board would reset. Classic power supply problem - the sudden current draw from servo movements was causing voltage dips that crashed the music board.
 Researched solutions and decided we need to implement separate power regulation for the audio system. Ordered some capacitors to add to the power rails for smoothing. Also realized we need to properly format the SD card with the correct file structure for the DFPlayer.
 <img width="337" height="415" alt="Screenshot 2025-12-17 at 6 17 36 AM" src="https://github.com/user-attachments/assets/e480de5a-bbe2-493f-9fae-e29373317de2" />
+
 ##11/06/2025 - Shoulder Servo Weight Issues:
 Today we fixed the servo with weight issues in the right shoulder. The servo was struggling to maintain position under load, causing the arm to droop during operation. After testing different positions and checking the mounting points, we confirmed it was a mechanical stress issue rather than electrical.
 The servo would move to position but couldn't hold it - the arm would slowly sag down despite full power. Checked our calculations and realized the 20kg servo was right at its limit with the arm weight and leverage. Ordered a 35kg servo as replacement but it won't arrive until next week.
 What features remain to be implemented? Radio connection stability improvements, music board integration with proper power management, and the emotional lighting system I've been planning.
-<img width="397" height="515" alt="Screenshot 2025-12-17 at 6 25 08 AM" src="https://github.com/user-attachments/assets/0fcdb843-8d02-4a84-9ee4-b23cd9b6ddee" />
 
 Nov 6
 What did you accomplish for today November 6?
